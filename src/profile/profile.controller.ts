@@ -1,5 +1,17 @@
-import { Body, Controller, Get, Param, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Put,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { IMulterFile } from '../shared/interface/request.interface';
+import { MulterConfigs } from '../config/multer';
 import { GetProfileResponseData } from './dto/get-profile.dto';
 import {
   ModifyProfileResponseData,
@@ -19,10 +31,12 @@ export class ProfileController {
   }
 
   @UseGuards(AuthGuard('jwt'))
+  @UseInterceptors(FileInterceptor('image', MulterConfigs))
   @Put()
   public async modifyProfile(
+    @UploadedFile() file: IMulterFile,
     @Body() dto: ModifyProfileDto,
   ): Promise<ModifyProfileResponseData> {
-    return await this.profileService.modifyProfile(dto);
+    return await this.profileService.modifyProfile(dto, file.location);
   }
 }
