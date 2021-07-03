@@ -1,5 +1,6 @@
 import { User } from '../../shared/user/entity/user.entity';
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
+import { Sns } from './sns.entity';
 
 @Entity('profile')
 export class Profile {
@@ -16,4 +17,7 @@ export class Profile {
 
   @Column({ length: 100 })
   image_path: string;
+
+  @OneToOne(() => Sns, (sns) => sns.profile_user_id)
+  sns: Sns;
 }
