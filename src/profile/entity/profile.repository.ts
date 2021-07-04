@@ -18,12 +18,10 @@ export class ProfileRepository extends Repository<Profile> {
   public async modifyProfile(
     profile: Profile,
     dto: ModifyProfileDto,
-    image_path: string,
   ): Promise<UpdateResult> {
     return await this.update(profile, {
       bio: dto.bio,
       name: dto.name,
-      image_path,
     });
   }
 }

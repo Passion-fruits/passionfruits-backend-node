@@ -15,7 +15,7 @@ export class Profile {
   @Column({ length: 250, nullable: true })
   bio: string;
 
-  @Column({ length: 150 })
+  @Column({ length: 255 })
   image_path: string;
 
   @OneToOne(() => Sns, (sns) => sns.profile_user_id)
