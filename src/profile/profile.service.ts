@@ -63,4 +63,12 @@ export class ProfileService {
     await this.profileRepository.modifyProfile(profileRecord, dto);
     return { ...dto };
   }
+
+  public async modifyProfileImage(image_path: string): Promise<void> {
+    const profileRecord = await this.profileRepository.findOne(
+      this.request.user.sub,
+    );
+    if (!profileRecord) throw NotFoundProfileException;
+    await this.profileRepository.update(profileRecord, { image_path });
+  }
 }
