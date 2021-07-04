@@ -11,7 +11,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { IMulterFile } from '../shared/interface/request.interface';
-import { MulterConfigs } from '../config/multer';
+import { ProfileMulterConfigs } from '../config/multer';
 import { GetProfileResponseData } from './dto/get-profile.dto';
 import {
   ModifyProfileResponseData,
@@ -39,7 +39,7 @@ export class ProfileController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @UseInterceptors(FileInterceptor('image', MulterConfigs))
+  @UseInterceptors(FileInterceptor('image', ProfileMulterConfigs))
   @Put('image')
   public async modifyProfileImage(
     @UploadedFile() file: IMulterFile,

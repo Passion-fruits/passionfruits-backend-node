@@ -11,13 +11,13 @@ AWS.config.update({
 
 const s3 = new AWS.S3();
 
-export const MulterConfigs: MulterOptions = {
+export const ProfileMulterConfigs: MulterOptions = {
   storage: multerS3({
     s3: s3,
     bucket: process.env.AWS_S3_BUCKET_NAME,
     acl: 'public-read',
     key: (req, file: Express.Multer.File, cb) => {
-      cb(null, `${v4()} ${file.originalname}`);
+      cb(null, `test/${v4()} ${file.originalname}`);
     },
   }),
 };
