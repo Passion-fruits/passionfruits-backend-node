@@ -33,7 +33,6 @@ export class ModifyProfileDto {
 export class ModifyProfileResponseData {
   name: string;
   bio: string;
-  image_path: string;
   insta: string;
   facebook: string;
   soundcloud: string;

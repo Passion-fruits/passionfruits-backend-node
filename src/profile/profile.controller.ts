@@ -31,12 +31,11 @@ export class ProfileController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @UseInterceptors(FileInterceptor('image', MulterConfigs))
   @Put()
   public async modifyProfile(
     @UploadedFile() file: IMulterFile,
     @Body() dto: ModifyProfileDto,
   ): Promise<ModifyProfileResponseData> {
-    return await this.profileService.modifyProfile(dto, file.location);
+    return await this.profileService.modifyProfile(dto);
   }
 }

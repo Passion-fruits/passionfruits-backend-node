@@ -49,7 +49,6 @@ export class ProfileService {
 
   public async modifyProfile(
     dto: ModifyProfileDto,
-    image_path: string,
   ): Promise<ModifyProfileResponseData> {
     const profileRecord = await this.profileRepository.findOne(
       this.request.user.sub,
@@ -61,7 +60,7 @@ export class ProfileService {
       await this.snsRepository.createSns(profileRecord.user_id, dto);
     else await this.snsRepository.modifySns(snsRecord, dto);
 
-    await this.profileRepository.modifyProfile(profileRecord, dto, image_path);
-    return { ...dto, image_path };
+    await this.profileRepository.modifyProfile(profileRecord, dto);
+    return { ...dto };
   }
 }
