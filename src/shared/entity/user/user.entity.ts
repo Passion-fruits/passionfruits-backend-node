@@ -1,5 +1,12 @@
 import { Profile } from '../../../profile/entity/profile.entity';
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Song } from '../../../song/entity/song.entity';
 
 @Entity('user')
 export class User {
@@ -11,4 +18,7 @@ export class User {
 
   @OneToOne(() => Profile, (profile) => profile.user_id)
   profile: Profile;
+
+  @OneToMany(() => Song, (song) => song.user)
+  song: Song[];
 }
