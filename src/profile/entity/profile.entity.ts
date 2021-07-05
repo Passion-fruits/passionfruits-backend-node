@@ -1,4 +1,4 @@
-import { User } from '../../shared/user/entity/user.entity';
+import { User } from '../../shared/entity/user/user.entity';
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 import { Sns } from './sns.entity';
 
