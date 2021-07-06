@@ -7,6 +7,7 @@ import { Song } from './song.entity';
 export class SongRepository extends Repository<Song> {
   public async createSong(
     song_url: string,
+    cover_url: string,
     dto: UploadSongDto,
     user: User,
   ): Promise<Song> {
@@ -16,6 +17,7 @@ export class SongRepository extends Repository<Song> {
       description: dto.description,
       song_url: `${process.env.AWS_S3_URL}/song/${song_url}`,
       short_url: `${process.env.AWS_S3_URL}/short/${song_url}`,
+      cover_url: `${process.env.AWS_S3_URL}/cover/${cover_url}`,
       user,
     });
     return await this.save(newSong);

@@ -1,6 +1,7 @@
 import { User } from '../../shared/entity/user/user.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -25,6 +26,12 @@ export class Song {
 
   @Column({ length: 150 })
   short_url: string;
+
+  @Column({ length: 150 })
+  cover_url: string;
+
+  @CreateDateColumn()
+  created_at: Date;
 
   @OneToOne(() => Mood, (mood) => mood.song_id)
   mood: Mood;
