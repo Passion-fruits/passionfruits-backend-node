@@ -7,6 +7,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Song } from '../../../song/entity/song.entity';
+import { UserLikeSong } from '../like/user-like-song.entity';
+import { UserCommentSong } from '../../../comment/entity/user-comment-song.entity';
 
 @Entity('user')
 export class User {
@@ -21,4 +23,13 @@ export class User {
 
   @OneToMany(() => Song, (song) => song.user)
   song: Song[];
+
+  @OneToMany(() => UserLikeSong, (userLikeSong) => userLikeSong.user_id)
+  user_like_song: UserLikeSong[];
+
+  @OneToMany(
+    () => UserCommentSong,
+    (userCommentSong) => userCommentSong.user_id,
+  )
+  user_comment_song: UserCommentSong[];
 }
