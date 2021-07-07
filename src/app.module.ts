@@ -6,6 +6,7 @@ import { HttpErrorFilter } from './shared/exception/exception.filter';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './shared/jwt/passport/jwt.strategy';
 import { SongModule } from './song/song.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { SongModule } from './song/song.module';
     ProfileModule,
     JwtModule.register({}),
     SongModule,
+    CommentModule,
   ],
   providers: [
     JwtStrategy,

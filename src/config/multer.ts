@@ -33,6 +33,7 @@ export const SongMulterConfigs: MulterOptions = {
         mkdirSync(uploadPath);
         mkdirSync(uploadPath + 'song/');
         mkdirSync(uploadPath + 'short/');
+        mkdirSync(uploadPath + 'cover/');
       }
       cb(null, uploadPath + 'song/');
     },

@@ -1,5 +1,4 @@
 import { IsNumberString, IsString, Length } from 'class-validator';
-import { User } from '../../shared/entity/user/user.entity';
 
 export class UploadSongDto {
   @Length(4, 30)

@@ -13,6 +13,8 @@ import { Mood } from './entity/mood/mood.entity';
 import { MoodRepository } from './entity/mood/mood.repository';
 import { SongGenre } from './entity/genre/song-genre.entity';
 import { SongGenreRepository } from './entity/genre/song-genre.repository';
+import { GetMySongsResponseData } from './dto/get-my-songs.dto';
+import { NotFoundSongException } from 'src/shared/exception/exception.index';
 
 @Injectable({ scope: Scope.REQUEST })
 export class SongService {
@@ -25,12 +27,25 @@ export class SongService {
     @Inject(REQUEST) private readonly request: IUserReqeust,
   ) {}
 
-  public async uploadSong(song_url: string, dto: UploadSongDto): Promise<void> {
+  public async getMySongs(): Promise<GetMySongsResponseData[]> {
+    const songRecords = await this.songRepository.getMySongs(
+      this.request.user.sub,
+    );
+    if (songRecords.length === 0) throw NotFoundSongException;
+    return songRecords;
+  }
+
+  public async uploadSong(
+    song_url: string,
+    cover_url: string,
+    dto: UploadSongDto,
+  ): Promise<void> {
     const MP3Cutter = require('mp3-cutter');
     const filepath = `${process.cwd()}/upload/`;
     const userRecord = await this.userRepository.findOne(this.request.user.sub);
     const songRecord = await this.songRepository.createSong(
       song_url,
+      cover_url,
       dto,
       userRecord,
     );
@@ -45,15 +60,20 @@ export class SongService {
       end: Math.floor(dto.duration / 3 + 15),
     });
 
-    await this.uploadS3(song_url, 'short');
-    await this.uploadS3(song_url, 'song');
+    await this.uploadS3(song_url, 'short', 'short');
+    await this.uploadS3(song_url, 'song', 'song');
+    await this.uploadS3(cover_url, 'song', 'cover');
   }
 
-  private async uploadS3(filename: string, folder: string): Promise<void> {
+  private async uploadS3(
+    filename: string,
+    folder: string,
+    s3folder: string,
+  ): Promise<void> {
     await s3
       .upload({
         Bucket: process.env.AWS_S3_BUCKET_NAME,
-        Key: `${folder}/${filename}`,
+        Key: `${s3folder}/${filename}`,
         ACL: 'public-read',
         Body: createReadStream(`${process.cwd()}/upload/${folder}/${filename}`),
       })

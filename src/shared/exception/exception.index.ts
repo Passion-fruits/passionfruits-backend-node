@@ -8,3 +8,4 @@ export const ExpiredTokenException = new UnauthorizedException('Token Expired');
 export const NotFoundProfileException = new NotFoundException(
   'Profile Not Found',
 );
+export const NotFoundSongException = new NotFoundException('Song Not Found');
