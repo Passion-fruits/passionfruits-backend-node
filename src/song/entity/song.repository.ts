@@ -2,6 +2,7 @@ import { User } from '../../shared/entity/user/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { UploadSongDto } from '../dto/upload-song.dto';
 import { Song } from './song.entity';
+import { GetMySongsResponseData } from '../dto/get-my-songs.dto';
 
 @EntityRepository(Song)
 export class SongRepository extends Repository<Song> {
@@ -21,5 +22,33 @@ export class SongRepository extends Repository<Song> {
       user,
     });
     return await this.save(newSong);
+  }
+
+  public async getMySongs(user_id: number): Promise<GetMySongsResponseData[]> {
+    return await this.createQueryBuilder('song')
+      .innerJoin('song.song_genre', 'song_genre')
+      .innerJoin('song.user', 'user')
+      .leftJoin('song.user_like_song', 'user_like_song')
+      .leftJoin('song.user_comment_song', 'user_comment_song')
+      .innerJoin('user.profile', 'profile')
+      .innerJoin('song_genre.genre_type', 'genre_type')
+      .select('song.id', 'id')
+      .addSelect('song.title', 'title')
+      .addSelect('song.description', 'description')
+      .addSelect('song.cover_url', 'cover_url')
+      .addSelect('song.created_at', 'created_at')
+      .addSelect('genre_type.name', 'genre')
+      .addSelect('profile.name', 'artist')
+      .addSelect(
+        'COUNT(distinct user_like_song.song_id, user_like_song.user_id)',
+        'like',
+      )
+      .addSelect(
+        'COUNT(distinct user_comment_song.song_id, user_comment_song.user_id)',
+        'comment',
+      )
+      .groupBy('song.id')
+      .where('song.user_id = :user_id', { user_id })
+      .getRawMany();
   }
 }
