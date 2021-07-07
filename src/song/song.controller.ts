@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
   UploadedFiles,
   UseGuards,
@@ -12,6 +13,7 @@ import { IMulterFile } from '../shared/interface/request.interface';
 import { SongMulterConfigs } from '../config/multer';
 import { UploadSongDto, UploadSongResponseData } from './dto/upload-song.dto';
 import { SongService } from './song.service';
+import { GetMySongsResponseData } from './dto/get-my-songs.dto';
 
 @Controller('song')
 export class SongController {
@@ -30,5 +32,11 @@ export class SongController {
       dto,
     );
     return { message: 'success' };
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get()
+  public async getMySongs(): Promise<GetMySongsResponseData[]> {
+    return await this.songService.getMySongs();
   }
 }
