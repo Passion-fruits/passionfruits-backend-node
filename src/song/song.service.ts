@@ -13,6 +13,8 @@ import { Mood } from './entity/mood/mood.entity';
 import { MoodRepository } from './entity/mood/mood.repository';
 import { SongGenre } from './entity/genre/song-genre.entity';
 import { SongGenreRepository } from './entity/genre/song-genre.repository';
+import { GetMySongsResponseData } from './dto/get-my-songs.dto';
+import { NotFoundSongException } from 'src/shared/exception/exception.index';
 
 @Injectable({ scope: Scope.REQUEST })
 export class SongService {
@@ -24,6 +26,14 @@ export class SongService {
     private readonly songGenreRepository: SongGenreRepository,
     @Inject(REQUEST) private readonly request: IUserReqeust,
   ) {}
+
+  public async getMySongs(): Promise<GetMySongsResponseData[]> {
+    const songRecords = await this.songRepository.getMySongs(
+      this.request.user.sub,
+    );
+    if (songRecords.length === 0) throw NotFoundSongException;
+    return songRecords;
+  }
 
   public async uploadSong(
     song_url: string,
