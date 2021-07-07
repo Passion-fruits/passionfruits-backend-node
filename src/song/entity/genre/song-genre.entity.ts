@@ -11,7 +11,7 @@ import { GenreType } from 'src/shared/entity/genre/genre-type.entity';
 @Entity('song_genre')
 export class SongGenre {
   @PrimaryColumn()
-  @OneToOne(() => Song, (song) => song.mood)
+  @OneToOne(() => Song, (song) => song.song_genre)
   @JoinColumn({ name: 'song_id' })
   song_id: number;
 
