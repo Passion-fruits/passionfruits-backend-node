@@ -3,6 +3,7 @@ import { EntityRepository, Repository } from 'typeorm';
 import { UploadSongDto } from '../dto/upload-song.dto';
 import { Song } from './song.entity';
 import { GetMySongsResponseData } from '../dto/get-my-songs.dto';
+import { GetSongResponseData } from '../dto/get-song.dto';
 
 @EntityRepository(Song)
 export class SongRepository extends Repository<Song> {
@@ -36,6 +37,8 @@ export class SongRepository extends Repository<Song> {
       .addSelect('song.title', 'title')
       .addSelect('song.description', 'description')
       .addSelect('song.cover_url', 'cover_url')
+      .addSelect('song.song_url', 'song_url')
+      .addSelect('song.short_url', 'short_url')
       .addSelect('song.created_at', 'created_at')
       .addSelect('genre_type.name', 'genre')
       .addSelect('profile.name', 'artist')
@@ -48,6 +51,21 @@ export class SongRepository extends Repository<Song> {
         'comment',
       )
       .groupBy('song.id')
+      .orderBy('song.id', 'ASC')
+      .where('song.user_id = :user_id', { user_id })
+      .getRawMany();
+  }
+
+  public async getSong(user_id: number): Promise<GetSongResponseData | any> {
+    return await this.createQueryBuilder('song')
+      .innerJoin('song.user', 'user')
+      .select('song.id', 'song_id')
+      .addSelect('user.id', 'user_id')
+      .addSelect('song.cover_url')
+      .addSelect('song.song_url')
+      .addSelect('song.title')
+      .addSelect('song.description')
+      .addSelect('song.created_at')
       .where('song.user_id = :user_id', { user_id })
       .getRawMany();
   }
