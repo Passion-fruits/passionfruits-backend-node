@@ -25,13 +25,13 @@ export class Song {
   @Column({ type: 'text', nullable: true })
   description: string;
 
-  @Column({ length: 150 })
+  @Column({ length: 255 })
   song_url: string;
 
-  @Column({ length: 150 })
+  @Column({ length: 255 })
   short_url: string;
 
-  @Column({ length: 150 })
+  @Column({ length: 255 })
   cover_url: string;
 
   @CreateDateColumn()
