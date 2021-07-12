@@ -1,7 +1,7 @@
 import { IsNumberString, IsString, Length } from 'class-validator';
 
 export class UploadSongDto {
-  @Length(4, 30)
+  @Length(1, 30)
   @IsString()
   title: string;
 
