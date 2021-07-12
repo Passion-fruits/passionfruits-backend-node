@@ -38,7 +38,6 @@ export class SongRepository extends Repository<Song> {
       .addSelect('song.description', 'description')
       .addSelect('song.cover_url', 'cover_url')
       .addSelect('song.song_url', 'song_url')
-      .addSelect('song.short_url', 'short_url')
       .addSelect('song.created_at', 'created_at')
       .addSelect('genre_type.name', 'genre')
       .addSelect('profile.name', 'artist')
@@ -56,17 +55,32 @@ export class SongRepository extends Repository<Song> {
       .getRawMany();
   }
 
-  public async getSong(user_id: number): Promise<GetSongResponseData | any> {
+  public async getSong(song_id: number): Promise<GetSongResponseData | any> {
     return await this.createQueryBuilder('song')
       .innerJoin('song.user', 'user')
+      .innerJoin('song.song_genre', 'song_genre')
+      .innerJoin('song_genre.genre_type', 'genre_type')
+      .innerJoin('user.profile', 'profile')
+      .innerJoin('song.mood', 'mood')
+      .innerJoin('mood.mood_type', 'mood_type')
+      .leftJoin('song.user_like_song', 'user_like_song')
       .select('song.id', 'song_id')
       .addSelect('user.id', 'user_id')
-      .addSelect('song.cover_url')
-      .addSelect('song.song_url')
-      .addSelect('song.title')
-      .addSelect('song.description')
-      .addSelect('song.created_at')
-      .where('song.user_id = :user_id', { user_id })
-      .getRawMany();
+      .addSelect('song.cover_url', 'cover_url')
+      .addSelect('song.song_url', 'song_url')
+      .addSelect('song.title', 'title')
+      .addSelect('song.description', 'description')
+      .addSelect('song.created_at', 'created_at')
+      .addSelect('genre_type.name', 'genre')
+      .addSelect('mood_type.name', 'mood')
+      .addSelect('profile.name', 'artist')
+      .addSelect(
+        'COUNT(distinct user_like_song.song_id, user_like_song.user_id)',
+        'like',
+      )
+      .groupBy('song.id')
+      .orderBy('song.id', 'ASC')
+      .where('song.id = :song_id', { song_id })
+      .getRawOne();
   }
 }

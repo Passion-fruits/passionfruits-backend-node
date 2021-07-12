@@ -15,6 +15,7 @@ import { SongGenre } from './entity/genre/song-genre.entity';
 import { SongGenreRepository } from './entity/genre/song-genre.repository';
 import { GetMySongsResponseData } from './dto/get-my-songs.dto';
 import { NotFoundSongException } from 'src/shared/exception/exception.index';
+import { GetSongResponseData } from './dto/get-song.dto';
 
 @Injectable({ scope: Scope.REQUEST })
 export class SongService {
@@ -26,6 +27,12 @@ export class SongService {
     private readonly songGenreRepository: SongGenreRepository,
     @Inject(REQUEST) private readonly request: IUserReqeust,
   ) {}
+
+  public async getSong(id: number): Promise<GetSongResponseData> {
+    const songRecord = await this.songRepository.getSong(id);
+    if (!songRecord) throw NotFoundSongException;
+    return songRecord;
+  }
 
   public async getMySongs(): Promise<GetMySongsResponseData[]> {
     const songRecords = await this.songRepository.getMySongs(

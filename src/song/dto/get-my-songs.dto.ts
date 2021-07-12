@@ -3,8 +3,10 @@ export class GetMySongsResponseData {
   title: string;
   description: string;
   created_at: Date;
-  genre: string;
+  genre: number;
   name: string;
   like: number;
   comment: number;
+  song_url: string;
+  cover_url: string;
 }

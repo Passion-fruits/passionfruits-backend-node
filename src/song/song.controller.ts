@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   UploadedFiles,
   UseGuards,
@@ -14,6 +15,7 @@ import { SongMulterConfigs } from '../config/multer';
 import { UploadSongDto, UploadSongResponseData } from './dto/upload-song.dto';
 import { SongService } from './song.service';
 import { GetMySongsResponseData } from './dto/get-my-songs.dto';
+import { GetSongResponseData } from './dto/get-song.dto';
 
 @Controller('song')
 export class SongController {
@@ -38,5 +40,10 @@ export class SongController {
   @Get()
   public async getMySongs(): Promise<GetMySongsResponseData[]> {
     return await this.songService.getMySongs();
+  }
+
+  @Get(':song_id')
+  public async getSong(@Param('song_id') id: number): Promise<GetSongResponseData> {
+    return await this.songService.getSong(id);
   }
 }
