@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserRepository } from '../shared/entity/user/user.repository';
 import { SongGenreRepository } from './entity/genre/song-genre.repository';
 import { MoodRepository } from './entity/mood/mood.repository';
+import { SongViewRepository } from './entity/song-view/song-view.repository';
 import { SongRepository } from './entity/song.repository';
 import { SongController } from './song.controller';
 import { SongService } from './song.service';
@@ -14,6 +15,7 @@ import { SongService } from './song.service';
       UserRepository,
       MoodRepository,
       SongGenreRepository,
+      SongViewRepository,
     ]),
   ],
   controllers: [SongController],
