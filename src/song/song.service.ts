@@ -86,6 +86,7 @@ export class SongService {
         Bucket: process.env.AWS_S3_BUCKET_NAME,
         Key: `${s3folder}/${filename}`,
         ACL: 'public-read',
+        ContentType: 'image/jpeg',
         Body: createReadStream(`${process.cwd()}/upload/${folder}/${filename}`),
       })
       .promise();
