@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../shared/entity/user/user.entity';
 import { UserRepository } from '../shared/entity/user/user.repository';
 import { IUserReqeust } from '../shared/interface/request.interface';
-import { UploadSongDto, UploadSongResponseData } from './dto/upload-song.dto';
+import { UploadSongDto } from './dto/upload-song.dto';
 import { Song } from './entity/song.entity';
 import { SongRepository } from './entity/song.repository';
 import { s3 } from '../config/multer';
@@ -16,11 +16,15 @@ import { SongGenreRepository } from './entity/genre/song-genre.repository';
 import { GetMySongsResponseData } from './dto/get-my-songs.dto';
 import { NotFoundSongException } from 'src/shared/exception/exception.index';
 import { GetSongResponseData } from './dto/get-song.dto';
+import { SongView } from './entity/song-view/song-view.entity';
+import { SongViewRepository } from './entity/song-view/song-view.repository';
 
 @Injectable({ scope: Scope.REQUEST })
 export class SongService {
   constructor(
     @InjectRepository(Song) private readonly songRepository: SongRepository,
+    @InjectRepository(SongView)
+    private readonly songViewRepository: SongViewRepository,
     @InjectRepository(User) private readonly userRepository: UserRepository,
     @InjectRepository(Mood) private readonly moodRepository: MoodRepository,
     @InjectRepository(SongGenre)
@@ -29,13 +33,13 @@ export class SongService {
   ) {}
 
   public async getSong(id: number): Promise<GetSongResponseData> {
-    const songRecord = await this.songRepository.getSong(id);
+    const songRecord = await this.songViewRepository.getSong(id);
     if (!songRecord) throw NotFoundSongException;
     return songRecord;
   }
 
   public async getMySongs(): Promise<GetMySongsResponseData[]> {
-    const songRecords = await this.songRepository.getMySongs(
+    const songRecords = await this.songViewRepository.getMySongs(
       this.request.user.sub,
     );
     if (songRecords.length === 0) throw NotFoundSongException;
