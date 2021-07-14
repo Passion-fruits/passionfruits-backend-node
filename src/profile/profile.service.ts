@@ -25,26 +25,13 @@ export class ProfileService {
 
   public async getProfile(user_id: number): Promise<GetProfileResponseData> {
     const profileRecord = await this.profileRepository.getProfile(user_id);
-    const snsRecord = await this.snsRepository.findOne(user_id);
     if (!profileRecord) throw NotFoundProfileException;
-    const { insta, facebook, soundcloud, youtube, ...profileResult } =
-      profileRecord;
 
-    if (!snsRecord) {
-      return {
-        ...profileResult,
-        insta: '',
-        facebook: '',
-        soundcloud: '',
-        youtube: '',
-      };
-    } else {
-      const { profile_user_id, ...snsResult } = snsRecord;
-      return {
-        ...profileRecord,
-        ...snsResult,
-      };
-    }
+    return profileRecord;
+  }
+
+  public getMyProfile(): Promise<GetProfileResponseData> {
+    return this.profileRepository.getProfile(this.request.user.sub);
   }
 
   public async modifyProfile(
