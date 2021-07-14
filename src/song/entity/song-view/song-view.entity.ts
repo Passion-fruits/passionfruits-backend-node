@@ -21,6 +21,7 @@ import { Song } from '../song.entity';
       .addSelect('song.title', 'title')
       .addSelect('song.description', 'description')
       .addSelect('song.created_at', 'created_at')
+      .addSelect('song_genre.genre_type', 'genre_number')
       .addSelect('genre_type.name', 'genre')
       .addSelect('mood_type.name', 'mood')
       .addSelect('profile.name', 'artist')
@@ -59,6 +60,9 @@ export class SongView {
 
   @ViewColumn()
   genre: string;
+
+  @ViewColumn()
+  genre_number: number;
 
   @ViewColumn()
   mood: string;
