@@ -38,6 +38,14 @@ export class SongService {
     return songRecord;
   }
 
+  public async getSongsByGenre(
+    genre: number,
+  ): Promise<GetMySongsResponseData[]> {
+    const songRecords = await this.songViewRepository.getSongsByGenre(genre);
+    if (songRecords.length === 0) throw NotFoundSongException;
+    return songRecords;
+  }
+
   public async getMySongs(): Promise<GetMySongsResponseData[]> {
     const songRecords = await this.songViewRepository.getMySongs(
       this.request.user.sub,
