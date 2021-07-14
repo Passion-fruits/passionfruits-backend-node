@@ -1,4 +1,11 @@
-import { NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
+
+// 400
+export const QueryBadRequest = new BadRequestException();
 
 // 401
 export const UnauthorizedTokenException = new UnauthorizedException();
