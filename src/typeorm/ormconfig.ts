@@ -25,7 +25,7 @@ const connectionOptions: DBConnectionOptions = {
     password: process.env.PRODUCTION_DATABASE_PASSWORD,
     database: process.env.PRODUCTION_DATABASE_NAME,
     synchronize: false,
-    logging: true,
+    logging: false,
     entities: ['./dist/**/*.entity.js'],
   },
 };
