@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -42,8 +43,17 @@ export class SongController {
     return await this.songService.getMySongs();
   }
 
+  @Get('sort')
+  public async getSongsByGenre(
+    @Query('genre') genre: number,
+  ): Promise<GetMySongsResponseData[]> {
+    return await this.songService.getSongsByGenre(genre);
+  }
+
   @Get(':song_id')
-  public async getSong(@Param('song_id') id: number): Promise<GetSongResponseData> {
+  public async getSong(
+    @Param('song_id') id: number,
+  ): Promise<GetSongResponseData> {
     return await this.songService.getSong(id);
   }
 }
