@@ -10,4 +10,5 @@ export class GetSongResponseData {
   created_at: Date;
   artist: string;
   like: number;
+  comment: number;
 }
