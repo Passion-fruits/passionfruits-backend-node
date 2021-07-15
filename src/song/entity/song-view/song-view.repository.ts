@@ -34,6 +34,7 @@ export class SongViewRepository extends Repository<SongView> {
       .addSelect('view.mood', 'mood')
       .addSelect('view.artist', 'artist')
       .addSelect('view.like', 'like')
+      .addSelect('view.comment', 'comment')
       .where('view.song_id = :song_id', { song_id })
       .getRawOne();
   }
