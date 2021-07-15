@@ -17,7 +17,7 @@ export class SongViewRepository extends Repository<SongView> {
       .addSelect('view.artist', 'artist')
       .addSelect('view.like', 'like')
       .addSelect('view.comment', 'comment')
-      .where('song.user_id = :user_id', { user_id })
+      .where('view.user_id = :user_id', { user_id })
       .getRawMany();
   }
 

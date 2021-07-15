@@ -22,6 +22,7 @@ export const ProfileMulterConfigs: MulterOptions = {
       cb(null, `profile/${v4()} ${file.originalname}`);
     },
   }),
+  limits: { fieldSize: 50 * 1024 * 1024 },
 };
 
 export const SongMulterConfigs: MulterOptions = {
@@ -42,4 +43,5 @@ export const SongMulterConfigs: MulterOptions = {
       cb(null, `${v4()} ${file.originalname}`);
     },
   }),
+  limits: { fieldSize: 50 * 1024 * 1024 },
 };
