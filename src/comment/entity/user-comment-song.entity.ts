@@ -1,6 +1,13 @@
 import { User } from 'src/shared/entity/user/user.entity';
 import { Song } from 'src/song/entity/song.entity';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+} from 'typeorm';
 
 @Entity('user_comment_song')
 export class UserCommentSong {
@@ -15,5 +22,8 @@ export class UserCommentSong {
   song_id: number;
 
   @Column({ length: 200 })
-  comment: string;
+  content: string;
+
+  @CreateDateColumn()
+  created_at: Date;
 }

@@ -6,5 +6,5 @@ export class CreateCommentDto {
 
   @IsString()
   @Length(1, 200)
-  comment: string;
+  content: string;
 }

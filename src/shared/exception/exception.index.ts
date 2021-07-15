@@ -21,3 +21,6 @@ export const NotFoundProfileException = new NotFoundException(
   'Profile Not Found',
 );
 export const NotFoundSongException = new NotFoundException('Song Not Found');
+export const NotFoundCommentException = new NotFoundException(
+  'Comment Not Found',
+);
