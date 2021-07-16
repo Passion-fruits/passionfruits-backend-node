@@ -58,4 +58,8 @@ export class ProfileService {
     if (!profileRecord) throw NotFoundProfileException;
     await this.profileRepository.update(profileRecord, { image_path });
   }
+
+  public checkMyProfile(user_id: number): boolean {
+    return this.request.user.sub === user_id;
+  }
 }
