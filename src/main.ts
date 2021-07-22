@@ -11,7 +11,6 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  app.setGlobalPrefix('api');
   await app.listen(process.env.PORT);
   console.log(`Server running on: ${await app.getUrl()}`);
 }
