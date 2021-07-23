@@ -39,8 +39,9 @@ export class SongViewRepository extends Repository<SongView> {
       .getRawOne();
   }
 
-  public async getSongsByGenre(
+  public async getStream(
     genre: number,
+    page: number,
   ): Promise<GetMySongsResponseData[]> {
     return this.createQueryBuilder('view')
       .select('view.song_id', 'song_id')
@@ -54,6 +55,8 @@ export class SongViewRepository extends Repository<SongView> {
       .addSelect('view.like', 'like')
       .addSelect('view.comment', 'comment')
       .where('view.genre_number = :genre', { genre })
+      .limit(page * 12)
+      .offset((page - 1) * 12)
       .getRawMany();
   }
 }
