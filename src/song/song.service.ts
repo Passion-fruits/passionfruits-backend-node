@@ -14,7 +14,10 @@ import { MoodRepository } from './entity/mood/mood.repository';
 import { SongGenre } from './entity/genre/song-genre.entity';
 import { SongGenreRepository } from './entity/genre/song-genre.repository';
 import { GetMySongsResponseData } from './dto/get-my-songs.dto';
-import { NotFoundSongException } from 'src/shared/exception/exception.index';
+import {
+  NotFoundSongException,
+  QueryBadRequest,
+} from 'src/shared/exception/exception.index';
 import { GetSongResponseData } from './dto/get-song.dto';
 import { SongView } from './entity/song-view/song-view.entity';
 import { SongViewRepository } from './entity/song-view/song-view.repository';
@@ -38,10 +41,12 @@ export class SongService {
     return songRecord;
   }
 
-  public async getSongsByGenre(
+  public async getStream(
     genre: number,
+    page: number,
   ): Promise<GetMySongsResponseData[]> {
-    const songRecords = await this.songViewRepository.getSongsByGenre(genre);
+    if (page <= 0) throw QueryBadRequest;
+    const songRecords = await this.songViewRepository.getStream(genre, page);
     if (songRecords.length === 0) throw NotFoundSongException;
     return songRecords;
   }
