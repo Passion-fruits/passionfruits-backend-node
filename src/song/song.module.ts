@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { SortTypeRepository } from 'src/shared/entity/sort/sort-type.repository';
 import { UserRepository } from '../shared/entity/user/user.repository';
 import { SongGenreRepository } from './entity/genre/song-genre.repository';
 import { MoodRepository } from './entity/mood/mood.repository';
@@ -16,6 +17,7 @@ import { SongService } from './song.service';
       MoodRepository,
       SongGenreRepository,
       SongViewRepository,
+      SortTypeRepository,
     ]),
   ],
   controllers: [SongController],
