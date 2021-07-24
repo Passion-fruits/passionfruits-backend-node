@@ -5,7 +5,10 @@ import { SongView } from './song-view.entity';
 
 @EntityRepository(SongView)
 export class SongViewRepository extends Repository<SongView> {
-  public async getMySongs(user_id: number): Promise<GetMySongsResponseData[]> {
+  public async getMySongs(
+    user_id: number,
+    page: number,
+  ): Promise<GetMySongsResponseData[]> {
     return this.createQueryBuilder('view')
       .select('view.song_id', 'song_id')
       .addSelect('view.title', 'title')
@@ -17,6 +20,8 @@ export class SongViewRepository extends Repository<SongView> {
       .addSelect('view.artist', 'artist')
       .addSelect('view.like', 'like')
       .addSelect('view.comment', 'comment')
+      .limit(page * 12)
+      .offset((page - 1) * 12)
       .where('view.user_id = :user_id', { user_id })
       .getRawMany();
   }
