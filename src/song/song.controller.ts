@@ -54,6 +54,15 @@ export class SongController {
     return await this.songService.getStream(genre, page, sort);
   }
 
+  @Get('feed')
+  public async getFeed(
+    @Query('genre') genre: number,
+    @Query('page') page: number,
+    @Query('sort') sort: number,
+  ): Promise<GetMySongsResponseData[]> {
+    return await this.songService.getFeed(genre, page, sort);
+  }
+
   @Get(':song_id')
   public async getSong(
     @Param('song_id') id: number,
