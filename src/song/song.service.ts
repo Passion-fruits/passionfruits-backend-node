@@ -85,9 +85,12 @@ export class SongService {
     return songRecords;
   }
 
-  public async getMySongs(): Promise<GetMySongsResponseData[]> {
+  public async getMySongs(page: number): Promise<GetMySongsResponseData[]> {
+    if (isNaN(page)) throw QueryBadRequest;
+    if (page <= 0) throw QueryBadRequest;
     const songRecords = await this.songViewRepository.getMySongs(
       this.request.user.sub,
+      page,
     );
     if (songRecords.length === 0) throw NotFoundSongException;
     return songRecords;
