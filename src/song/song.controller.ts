@@ -41,8 +41,10 @@ export class SongController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get()
-  public async getMySongs(): Promise<GetMySongsResponseData[]> {
-    return await this.songService.getMySongs();
+  public async getMySongs(
+    @Query('page') page: number,
+  ): Promise<GetMySongsResponseData[]> {
+    return await this.songService.getMySongs(page);
   }
 
   @Get('stream')
