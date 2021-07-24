@@ -49,9 +49,9 @@ export class SongController {
   public async getStream(
     @Query('genre') genre: number,
     @Query('page') page: number,
+    @Query('sort') sort: number,
   ): Promise<GetMySongsResponseData[]> {
-    if (isNaN(genre)) throw QueryBadRequest;
-    return await this.songService.getStream(genre, page);
+    return await this.songService.getStream(genre, page, sort);
   }
 
   @Get(':song_id')

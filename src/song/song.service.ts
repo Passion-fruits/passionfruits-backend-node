@@ -21,6 +21,8 @@ import {
 import { GetSongResponseData } from './dto/get-song.dto';
 import { SongView } from './entity/song-view/song-view.entity';
 import { SongViewRepository } from './entity/song-view/song-view.repository';
+import { SortType } from 'src/shared/entity/sort/sort-type.entity';
+import { SortTypeRepository } from 'src/shared/entity/sort/sort-type.repository';
 
 @Injectable({ scope: Scope.REQUEST })
 export class SongService {
@@ -32,6 +34,8 @@ export class SongService {
     @InjectRepository(Mood) private readonly moodRepository: MoodRepository,
     @InjectRepository(SongGenre)
     private readonly songGenreRepository: SongGenreRepository,
+    @InjectRepository(SortType)
+    private readonly sortTypeRepository: SortTypeRepository,
     @Inject(REQUEST) private readonly request: IUserReqeust,
   ) {}
 
@@ -44,9 +48,19 @@ export class SongService {
   public async getStream(
     genre: number,
     page: number,
+    sort: number,
   ): Promise<GetMySongsResponseData[]> {
+    if (isNaN(genre) || isNaN(page) || isNaN(sort)) throw QueryBadRequest;
     if (page <= 0) throw QueryBadRequest;
-    const songRecords = await this.songViewRepository.getStream(genre, page);
+    const sortTypeRecords = await this.sortTypeRepository.findOne(sort);
+    if (!sortTypeRecords) throw QueryBadRequest;
+
+    const songRecords = await this.songViewRepository.getStream(
+      genre,
+      page,
+      sortTypeRecords.name,
+      sortTypeRecords.order,
+    );
     if (songRecords.length === 0) throw NotFoundSongException;
     return songRecords;
   }
