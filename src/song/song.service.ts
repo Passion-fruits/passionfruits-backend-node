@@ -65,6 +65,26 @@ export class SongService {
     return songRecords;
   }
 
+  public async getFeed(
+    genre: number,
+    page: number,
+    sort: number,
+  ): Promise<GetMySongsResponseData[]> {
+    if (isNaN(genre) || isNaN(page) || isNaN(sort)) throw QueryBadRequest;
+    if (page <= 0) throw QueryBadRequest;
+    const sortTypeRecords = await this.sortTypeRepository.findOne(sort);
+    if (!sortTypeRecords) throw QueryBadRequest;
+
+    const songRecords = await this.songViewRepository.getFeed(
+      genre,
+      page,
+      sortTypeRecords.name,
+      sortTypeRecords.order,
+    );
+    if (songRecords.length === 0) throw NotFoundSongException;
+    return songRecords;
+  }
+
   public async getMySongs(): Promise<GetMySongsResponseData[]> {
     const songRecords = await this.songViewRepository.getMySongs(
       this.request.user.sub,

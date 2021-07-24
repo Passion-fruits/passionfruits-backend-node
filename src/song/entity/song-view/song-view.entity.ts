@@ -18,6 +18,7 @@ import { Song } from '../song.entity';
       .addSelect('user.id', 'user_id')
       .addSelect('song.cover_url', 'cover_url')
       .addSelect('song.song_url', 'song_url')
+      .addSelect('song.short_url', 'short_url')
       .addSelect('song.title', 'title')
       .addSelect('song.description', 'description')
       .addSelect('song.created_at', 'created_at')
@@ -48,6 +49,9 @@ export class SongView {
 
   @ViewColumn()
   song_url: string;
+
+  @ViewColumn()
+  short_url: string;
 
   @ViewColumn()
   title: string;
