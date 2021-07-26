@@ -18,7 +18,6 @@ import { UploadSongDto, UploadSongResponseData } from './dto/upload-song.dto';
 import { SongService } from './song.service';
 import { GetMySongsResponseData } from './dto/get-my-songs.dto';
 import { GetSongResponseData } from './dto/get-song.dto';
-import { QueryBadRequest } from 'src/shared/exception/exception.index';
 
 @Controller('song')
 export class SongController {
