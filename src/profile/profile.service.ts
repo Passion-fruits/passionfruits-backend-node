@@ -12,6 +12,11 @@ import { ProfileRepository } from './entity/profile.repository';
 import { NotFoundProfileException } from '../shared/exception/exception.index';
 import { Sns } from './entity/sns.entity';
 import { SnsRepository } from './entity/sns.repoistory';
+import * as jwt from 'jsonwebtoken';
+import { JWT_SECRET_KEY } from 'src/shared/jwt/jwt.constant';
+import { IJwtPayload } from 'src/shared/jwt/interface/payload.interface';
+import { User } from 'src/shared/entity/user/user.entity';
+import { UserRepository } from 'src/shared/entity/user/user.repository';
 
 @Injectable({ scope: Scope.REQUEST })
 export class ProfileService {
@@ -20,14 +25,19 @@ export class ProfileService {
     private readonly profileRepository: ProfileRepository,
     @InjectRepository(Sns)
     private readonly snsRepository: SnsRepository,
+    @InjectRepository(User)
+    private readonly userRepository: UserRepository,
     @Inject(REQUEST) private readonly request: IUserReqeust,
   ) {}
 
-  public async getProfile(user_id: number): Promise<GetProfileResponseData> {
+  public async getProfile(
+    user_id: number,
+    token: string,
+  ): Promise<GetProfileResponseData> {
     const profileRecord = await this.profileRepository.getProfile(user_id);
     if (!profileRecord) throw NotFoundProfileException;
-
-    return profileRecord;
+    const is_mine = await this.verifyUser(user_id, token);
+    return { ...profileRecord, is_mine };
   }
 
   public getMyProfile(): Promise<GetProfileResponseData> {
@@ -61,5 +71,23 @@ export class ProfileService {
 
   public checkMyProfile(user_id: number): boolean {
     return this.request.user.sub === user_id;
+  }
+
+  private async verifyUser(user_id: number, token: string): Promise<boolean> {
+    try {
+      if (!token) return false;
+      const splitToken = token.split(' ');
+      if (splitToken[0] !== 'Bearer') return false;
+      const payload: IJwtPayload | any = jwt.verify(
+        splitToken[1],
+        JWT_SECRET_KEY,
+      );
+      if (payload.type !== 'access') return false;
+      const userRecord = await this.userRepository.findOne(user_id);
+      if (userRecord) return true;
+      else return false;
+    } catch (e) {
+      return false;
+    }
   }
 }

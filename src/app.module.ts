@@ -4,7 +4,7 @@ import { ProfileModule } from './profile/profile.module';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpErrorFilter } from './shared/exception/exception.filter';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from './shared/jwt/passport/jwt.strategy';
+import { JwtStrategy } from './shared/jwt/strategy/jwt.strategy';
 import { SongModule } from './song/song.module';
 import { CommentModule } from './comment/comment.module';
 
