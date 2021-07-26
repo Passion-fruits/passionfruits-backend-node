@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Headers,
   Param,
   Put,
   UploadedFile,
@@ -26,8 +27,9 @@ export class ProfileController {
   @Get(':user_id')
   public async getProfile(
     @Param('user_id') user_id: number,
+    @Headers('Authorization') token: string,
   ): Promise<GetProfileResponseData> {
-    return await this.profileService.getProfile(user_id);
+    return await this.profileService.getProfile(user_id, token);
   }
 
   @UseGuards(AuthGuard('jwt'))
