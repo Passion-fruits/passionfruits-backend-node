@@ -6,4 +6,5 @@ export class GetProfileResponseData {
   facebook: string;
   soundcloud: string;
   youtube: string;
+  is_mine: boolean;
 }
