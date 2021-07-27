@@ -55,13 +55,4 @@ export class ProfileController {
     await this.profileService.modifyProfileImage(file.location);
     return { image_path: file.location };
   }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Get('check/:user_id')
-  public async checkMyProfile(
-    @Param('user_id') user_id: number,
-  ): Promise<{ is_mine: boolean }> {
-    const is_mine = await this.profileService.checkMyProfile(user_id);
-    return { is_mine };
-  }
 }
