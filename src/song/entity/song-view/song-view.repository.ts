@@ -5,7 +5,7 @@ import { SongView } from './song-view.entity';
 
 @EntityRepository(SongView)
 export class SongViewRepository extends Repository<SongView> {
-  public async getMySongs(
+  public async getSongsByUserId(
     user_id: number,
     page: number,
   ): Promise<GetMySongsResponseData[]> {

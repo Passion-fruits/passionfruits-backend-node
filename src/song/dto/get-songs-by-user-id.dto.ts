@@ -5,12 +5,11 @@ export class GetSongsByUserIdResponseData {
 
 export class SongData {
   song_id: number;
-  user_id: number;
   title: string;
   description: string;
   created_at: Date;
   genre: number;
-  name: string;
+  artist: string;
   like: number;
   comment: number;
   song_url: string;
