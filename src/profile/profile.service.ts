@@ -86,22 +86,4 @@ export class ProfileService {
       return false;
     }
   }
-
-  private async verifyUser(user_id: number, token: string): Promise<boolean> {
-    try {
-      if (!token) return false;
-      const splitToken = token.split(' ');
-      if (splitToken[0] !== 'Bearer') return false;
-      const payload: IJwtPayload | any = jwt.verify(
-        splitToken[1],
-        JWT_SECRET_KEY,
-      );
-      if (payload.type !== 'access') return false;
-      const userRecord = await this.userRepository.findOne(user_id);
-      if (userRecord) return true;
-      else return false;
-    } catch (e) {
-      return false;
-    }
-  }
 }
