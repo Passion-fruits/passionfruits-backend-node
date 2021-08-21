@@ -22,4 +22,10 @@ export class SongRepository extends Repository<Song> {
     });
     return await this.save(newSong);
   }
+
+  public async getCountsByUserId(user_id: number): Promise<number> {
+    return await this.createQueryBuilder('song')
+      .where('song.user_id = :user_id', { user_id })
+      .getCount();
+  }
 }

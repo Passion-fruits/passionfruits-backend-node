@@ -23,6 +23,7 @@ import { SongView } from './entity/song-view/song-view.entity';
 import { SongViewRepository } from './entity/song-view/song-view.repository';
 import { SortType } from 'src/shared/entity/sort/sort-type.entity';
 import { SortTypeRepository } from 'src/shared/entity/sort/sort-type.repository';
+import { GetSongsByUserIdResponseData } from './dto/get-songs-by-user-id.dto';
 
 @Injectable({ scope: Scope.REQUEST })
 export class SongService {
@@ -85,15 +86,19 @@ export class SongService {
     return songRecords;
   }
 
-  public async getMySongs(page: number): Promise<GetMySongsResponseData[]> {
+  public async getSongsByUserId(
+    user_id: number,
+    page: number,
+  ): Promise<GetSongsByUserIdResponseData> {
     if (isNaN(page)) throw QueryBadRequest;
     if (page <= 0) throw QueryBadRequest;
-    const songRecords = await this.songViewRepository.getMySongs(
-      this.request.user.sub,
+    const songRecords = await this.songViewRepository.getSongsByUserId(
+      user_id,
       page,
     );
+    const songCounts = await this.songRepository.getCountsByUserId(user_id);
     if (songRecords.length === 0) throw NotFoundSongException;
-    return songRecords;
+    return { song_count: songCounts, songs: songRecords };
   }
 
   public async uploadSong(
