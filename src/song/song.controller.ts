@@ -39,7 +39,7 @@ export class SongController {
     return { message: 'success' };
   }
 
-  @Get(':user_id')
+  @Get('profile/:user_id')
   public async getSongsByUserId(
     @Param('user_id') user_id: number,
     @Query('page') page: number,
