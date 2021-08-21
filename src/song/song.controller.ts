@@ -18,6 +18,7 @@ import { UploadSongDto, UploadSongResponseData } from './dto/upload-song.dto';
 import { SongService } from './song.service';
 import { GetMySongsResponseData } from './dto/get-my-songs.dto';
 import { GetSongResponseData } from './dto/get-song.dto';
+import { GetSongsByUserIdResponseData } from './dto/get-songs-by-user-id.dto';
 
 @Controller('song')
 export class SongController {
@@ -38,12 +39,12 @@ export class SongController {
     return { message: 'success' };
   }
 
-  @UseGuards(AuthGuard('jwt'))
-  @Get()
-  public async getMySongs(
+  @Get(':user_id')
+  public async getSongsByUserId(
+    @Param('user_id') user_id: number,
     @Query('page') page: number,
-  ): Promise<GetMySongsResponseData[]> {
-    return await this.songService.getMySongs(page);
+  ): Promise<GetSongsByUserIdResponseData> {
+    return await this.songService.getSongsByUserId(user_id, page);
   }
 
   @Get('stream')
