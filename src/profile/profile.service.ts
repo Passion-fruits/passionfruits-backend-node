@@ -76,8 +76,9 @@ export class ProfileService {
       );
       if (payload.type !== 'access') return false;
       const userRecord = await this.userRepository.findOne(user_id);
-      if (userRecord) return true;
-      else return false;
+      if (!userRecord) return false;
+      if (user_id !== payload.sub) return false;
+      return true;
     } catch (e) {
       return false;
     }
