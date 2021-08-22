@@ -7,4 +7,6 @@ export class GetProfileResponseData {
   soundcloud: string;
   youtube: string;
   is_mine: boolean;
+  follower: number;
+  following: number;
 }
