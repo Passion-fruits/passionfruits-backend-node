@@ -41,12 +41,6 @@ export class ProfileController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get()
-  public async getMyProfile(): Promise<GetProfileResponseData> {
-    return await this.profileService.getMyProfile();
-  }
-
-  @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(FileInterceptor('image', ProfileMulterConfigs))
   @Put('image')
   public async modifyProfileImage(
