@@ -40,10 +40,6 @@ export class ProfileService {
     return { ...profileRecord, is_mine };
   }
 
-  public getMyProfile(): Promise<GetProfileResponseData> {
-    return this.profileRepository.getProfile(this.request.user.sub);
-  }
-
   public async modifyProfile(
     dto: ModifyProfileDto,
   ): Promise<ModifyProfileResponseData> {
