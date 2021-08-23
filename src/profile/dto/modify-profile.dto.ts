@@ -2,7 +2,7 @@ import { IsString, IsUrl, Length } from 'class-validator';
 
 export class ModifyProfileDto {
   @IsString()
-  @Length(4, 30)
+  @Length(2, 30)
   name: string;
 
   @IsString()
@@ -11,22 +11,18 @@ export class ModifyProfileDto {
 
   @IsString()
   @Length(0, 150)
-  @IsUrl()
   insta: string;
 
   @IsString()
   @Length(0, 150)
-  @IsUrl()
   facebook: string;
 
   @IsString()
   @Length(0, 150)
-  @IsUrl()
   soundcloud: string;
 
   @IsString()
   @Length(0, 150)
-  @IsUrl()
   youtube: string;
 }
 
