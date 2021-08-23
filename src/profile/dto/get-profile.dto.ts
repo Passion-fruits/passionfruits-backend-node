@@ -1,5 +1,6 @@
 export class GetProfileResponseData {
   profile: string;
+  bio: string;
   name: string;
   email: string;
   insta: string;

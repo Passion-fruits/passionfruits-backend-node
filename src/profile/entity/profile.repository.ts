@@ -13,6 +13,7 @@ export class ProfileRepository extends Repository<Profile> {
       .leftJoin('user.following', 'following')
       .select('user.email', 'email')
       .addSelect('profile.name', 'name')
+      .addSelect('profile.bio', 'bio')
       .addSelect('profile.image_path', 'profile')
       .addSelect('sns.insta', 'insta')
       .addSelect('sns.facebook', 'facebook')
