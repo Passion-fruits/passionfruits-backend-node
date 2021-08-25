@@ -76,6 +76,7 @@ export class SongViewRepository extends Repository<SongView> {
   ): Promise<GetMySongsResponseData[]> {
     return this.createQueryBuilder('view')
       .select('view.song_id', 'song_id')
+      .addSelect('view.user_id', 'user_id')
       .addSelect('view.title', 'title')
       .addSelect('view.description', 'description')
       .addSelect('view.cover_url', 'cover_url')
