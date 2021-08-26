@@ -30,6 +30,7 @@ export class UserCommentSongRepository extends Repository<UserCommentSong> {
       .addSelect('profile.image_path', 'profile')
       .addSelect('comment.content')
       .where('comment.song_id = :song_id', { song_id })
+      .orderBy('user.id', 'DESC')
       .getRawMany();
   }
 }
