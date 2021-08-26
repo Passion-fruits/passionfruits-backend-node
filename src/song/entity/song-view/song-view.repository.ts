@@ -23,6 +23,7 @@ export class SongViewRepository extends Repository<SongView> {
       .limit(12)
       .offset((page - 1) * 12)
       .where('view.user_id = :user_id', { user_id })
+      .orderBy('view.song_id', 'DESC')
       .getRawMany();
   }
 
