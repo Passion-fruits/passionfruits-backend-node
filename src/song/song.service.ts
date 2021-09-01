@@ -24,6 +24,7 @@ import { SongViewRepository } from './entity/song-view/song-view.repository';
 import { SortType } from 'src/shared/entity/sort/sort-type.entity';
 import { SortTypeRepository } from 'src/shared/entity/sort/sort-type.repository';
 import { GetSongsByUserIdResponseData } from './dto/get-songs-by-user-id.dto';
+import { GetStreamResponseData } from './dto/get-stream.dto';
 
 @Injectable({ scope: Scope.REQUEST })
 export class SongService {
@@ -50,7 +51,7 @@ export class SongService {
     genre: number,
     page: number,
     sort: number,
-  ): Promise<GetMySongsResponseData[]> {
+  ): Promise<GetStreamResponseData> {
     if (isNaN(genre) || isNaN(page) || isNaN(sort)) throw QueryBadRequest;
     if (page <= 0) throw QueryBadRequest;
     const sortTypeRecords = await this.sortTypeRepository.findOne(sort);
@@ -62,8 +63,9 @@ export class SongService {
       sortTypeRecords.name,
       sortTypeRecords.order,
     );
+    const max_song = await this.songGenreRepository.getCountsByGenre(genre);
     if (songRecords.length === 0) throw NotFoundSongException;
-    return songRecords;
+    return { max_song, songs: songRecords };
   }
 
   public async getFeed(
