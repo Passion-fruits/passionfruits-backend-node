@@ -19,6 +19,7 @@ import { SongService } from './song.service';
 import { GetMySongsResponseData } from './dto/get-my-songs.dto';
 import { GetSongResponseData } from './dto/get-song.dto';
 import { GetSongsByUserIdResponseData } from './dto/get-songs-by-user-id.dto';
+import { GetStreamResponseData } from './dto/get-stream.dto';
 
 @Controller('song')
 export class SongController {
@@ -52,7 +53,7 @@ export class SongController {
     @Query('genre') genre: number,
     @Query('page') page: number,
     @Query('sort') sort: number,
-  ): Promise<GetMySongsResponseData[]> {
+  ): Promise<GetStreamResponseData> {
     return await this.songService.getStream(genre, page, sort);
   }
 
