@@ -51,6 +51,7 @@ export class SongService {
     genre: number,
     page: number,
     sort: number,
+    size: number,
   ): Promise<GetStreamResponseData> {
     if (isNaN(genre) || isNaN(page) || isNaN(sort)) throw QueryBadRequest;
     if (page <= 0) throw QueryBadRequest;
@@ -62,6 +63,7 @@ export class SongService {
       page,
       sortTypeRecords.name,
       sortTypeRecords.order,
+      size,
     );
     const max_song = await this.songGenreRepository.getCountsByGenre(genre);
     if (songRecords.length === 0) throw NotFoundSongException;

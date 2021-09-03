@@ -50,6 +50,7 @@ export class SongViewRepository extends Repository<SongView> {
     page: number,
     sort: string,
     order: 'ASC' | 'DESC',
+    size: number,
   ): Promise<GetMySongsResponseData[]> {
     return this.createQueryBuilder('view')
       .select('view.song_id', 'song_id')
@@ -63,8 +64,8 @@ export class SongViewRepository extends Repository<SongView> {
       .addSelect('view.like', 'like')
       .addSelect('view.comment', 'comment')
       .where('view.genre_number = :genre', { genre })
-      .limit(12)
-      .offset((page - 1) * 12)
+      .limit(size)
+      .offset((page - 1) * size)
       .orderBy(`view.${sort}`, order)
       .getRawMany();
   }
