@@ -53,8 +53,9 @@ export class SongController {
     @Query('genre') genre: number,
     @Query('page') page: number,
     @Query('sort') sort: number,
+    @Query('size') size: number,
   ): Promise<GetStreamResponseData> {
-    return await this.songService.getStream(genre, page, sort);
+    return await this.songService.getStream(genre, page, sort, size);
   }
 
   @Get('feed')
