@@ -88,6 +88,7 @@ export class SongViewRepository extends Repository<SongView> {
       .addSelect('view.artist', 'artist')
       .addSelect('view.like', 'like')
       .addSelect('view.comment', 'comment')
+      .addSelect('view.mood', 'mood')
       .where('view.genre_number = :genre', { genre })
       .limit(12)
       .offset((page - 1) * 12)
