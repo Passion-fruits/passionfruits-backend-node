@@ -11,6 +11,7 @@ import { UserLikeSong } from '../like/user-like-song.entity';
 import { UserCommentSong } from '../../../comment/entity/user-comment-song.entity';
 import { Follow } from '../follow/follow.entity';
 import { Playlist } from 'src/playlist/entity/playlist.entity';
+import { UserLikePlaylist } from 'src/playlist/entity/user-like-playlist.entity';
 
 @Entity('user')
 export class User {
@@ -28,6 +29,12 @@ export class User {
 
   @OneToMany(() => UserLikeSong, (userLikeSong) => userLikeSong.user_id)
   user_like_song: UserLikeSong[];
+
+  @OneToMany(
+    () => UserLikePlaylist,
+    (userLikePlaylist) => userLikePlaylist.user_id,
+  )
+  user_like_playlist: UserLikePlaylist;
 
   @OneToMany(
     () => UserCommentSong,

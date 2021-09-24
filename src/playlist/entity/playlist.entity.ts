@@ -9,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { PlaylistHasSong } from './playlist-has-song.entity';
+import { UserLikePlaylist } from './user-like-playlist.entity';
 
 @Entity('playlist')
 export class Playlist {
@@ -29,8 +30,14 @@ export class Playlist {
   user: number;
 
   @OneToMany(
+    () => UserLikePlaylist,
+    (userLikePlaylist) => userLikePlaylist.playlist_id,
+  )
+  user_like_playlist: UserLikePlaylist[];
+
+  @OneToMany(
     () => PlaylistHasSong,
     (playlistHasSong) => playlistHasSong.playlist_id,
   )
-  playlistHasSong: PlaylistHasSong[];
+  play_list_has_song: PlaylistHasSong[];
 }

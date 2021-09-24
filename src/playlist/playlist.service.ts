@@ -7,9 +7,15 @@ import {
   PlaylistHasSongExistException,
 } from 'src/shared/exception/exception.index';
 import { IUserReqeust } from 'src/shared/interface/request.interface';
+import { SongViewRepository } from 'src/song/entity/song-view/song-view.repository';
 import { AddSongInPlaylistDto } from './dto/add-song-in-playlist.dto';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { DeleteSongInPlaylistDto } from './dto/delete-song-in-playlist.dto';
+import {
+  GetPlaylistResponseData,
+  PlaylistVo,
+  SongVo,
+} from './dto/get-playlist.dto';
 import { PlaylistHasSongRepository } from './entity/playlist-has-song.repository';
 import { PlaylistRepository } from './entity/playlist.repository';
 
@@ -20,11 +26,28 @@ export class PlaylistService {
     private readonly playlistRepository: PlaylistRepository,
     @InjectRepository(PlaylistHasSongRepository)
     private readonly playlistHasSongRepository: PlaylistHasSongRepository,
+    @InjectRepository(SongViewRepository)
+    private readonly songViewRepository: SongViewRepository,
     @Inject(REQUEST) private readonly request: IUserReqeust,
   ) {}
 
   public createPlaylist(dto: CreatePlaylistDto): void {
     this.playlistRepository.createPlaylist(dto, this.request.user.sub);
+  }
+
+  public async getPlaylist(
+    playlist_id: number,
+  ): Promise<GetPlaylistResponseData> {
+    const playlistRecord: PlaylistVo =
+      await this.playlistRepository.getPlaylist(playlist_id);
+    console.log(playlistRecord);
+    const songRecords: SongVo[] =
+      await this.songViewRepository.getSongsByPlaylistId(playlist_id);
+
+    return {
+      playlist: playlistRecord,
+      songs: songRecords,
+    };
   }
 
   public async addSongInPlaylist(
