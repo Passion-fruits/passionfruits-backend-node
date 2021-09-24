@@ -2,6 +2,7 @@ import { GetMySongsResponseData } from '../../../song/dto/get-my-songs.dto';
 import { GetSongResponseData } from '../../../song/dto/get-song.dto';
 import { EntityRepository, Repository } from 'typeorm';
 import { SongView } from './song-view.entity';
+import { SongVo } from 'src/playlist/dto/get-playlist.dto';
 
 @EntityRepository(SongView)
 export class SongViewRepository extends Repository<SongView> {
@@ -93,6 +94,22 @@ export class SongViewRepository extends Repository<SongView> {
       .limit(12)
       .offset((page - 1) * 12)
       .orderBy(`view.${sort}`, order)
+      .getRawMany();
+  }
+
+  public async getSongsByPlaylistId(playlist_id: number): Promise<SongVo[]> {
+    return this.createQueryBuilder('view')
+      .select('view.song_id', 'song_id')
+      .addSelect('view.user_id', 'user_id')
+      .addSelect('view.cover_url', 'cover_url')
+      .addSelect('view.song_url', 'song_url')
+      .addSelect('view.title', 'title')
+      .addSelect('view.mood', 'mood')
+      .addSelect('view.genre', 'genre')
+      .addSelect('view.created_at', 'created_at')
+      .addSelect('view.artist', 'artist')
+      .addSelect('view.like', 'like')
+      .where('view.playlist_has_song_id = :playlist_id', { playlist_id })
       .getRawMany();
   }
 }
