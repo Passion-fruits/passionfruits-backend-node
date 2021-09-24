@@ -6,12 +6,12 @@ import { Playlist } from './playlist.entity';
 export class PlaylistRepository extends Repository<Playlist> {
   public async createPlaylist(
     dto: CreatePlaylistDto,
-    user_id: number,
+    user: number,
   ): Promise<void> {
     let newPlaylist: Playlist;
     newPlaylist = this.create({
       name: dto.name,
-      user: user_id,
+      user,
     });
     await this.save(newPlaylist);
   }
