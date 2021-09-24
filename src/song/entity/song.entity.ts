@@ -61,5 +61,5 @@ export class Song {
     () => PlaylistHasSong,
     (playlistHasSong) => playlistHasSong.song_id,
   )
-  playlistHasSong: PlaylistHasSong[];
+  playlist_has_song: PlaylistHasSong[];
 }
