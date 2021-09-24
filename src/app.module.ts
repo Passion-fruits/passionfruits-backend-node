@@ -7,6 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './shared/jwt/strategy/jwt.strategy';
 import { SongModule } from './song/song.module';
 import { CommentModule } from './comment/comment.module';
+import { PlaylistModule } from './playlist/playlist.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { CommentModule } from './comment/comment.module';
     JwtModule.register({}),
     SongModule,
     CommentModule,
+    PlaylistModule,
   ],
   providers: [
     JwtStrategy,

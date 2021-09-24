@@ -13,6 +13,7 @@ import { Mood } from './mood/mood.entity';
 import { SongGenre } from './genre/song-genre.entity';
 import { UserLikeSong } from '../../shared/entity/like/user-like-song.entity';
 import { UserCommentSong } from '../../comment/entity/user-comment-song.entity';
+import { PlaylistHasSong } from 'src/playlist/entity/playlist-has-song.entity';
 
 @Entity('song')
 export class Song {
@@ -55,4 +56,10 @@ export class Song {
     (userCommentSong) => userCommentSong.song_id,
   )
   user_comment_song: UserCommentSong[];
+
+  @OneToMany(
+    () => PlaylistHasSong,
+    (playlistHasSong) => playlistHasSong.song_id,
+  )
+  playlistHasSong: PlaylistHasSong[];
 }

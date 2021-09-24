@@ -10,6 +10,7 @@ import { Song } from '../../../song/entity/song.entity';
 import { UserLikeSong } from '../like/user-like-song.entity';
 import { UserCommentSong } from '../../../comment/entity/user-comment-song.entity';
 import { Follow } from '../follow/follow.entity';
+import { Playlist } from 'src/playlist/entity/playlist.entity';
 
 @Entity('user')
 export class User {
@@ -39,4 +40,7 @@ export class User {
 
   @OneToMany(() => Follow, (follow) => follow.following)
   following: Follow[];
+
+  @OneToMany(() => Playlist, (playlist) => playlist.user)
+  playlist: Playlist[];
 }
