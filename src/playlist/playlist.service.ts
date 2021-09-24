@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import {
   NotFoundPlaylistException,
   NotFoundPlaylistHasSongException,
+  NotFoundSongException,
   PlaylistHasSongExistException,
 } from 'src/shared/exception/exception.index';
 import { IUserReqeust } from 'src/shared/interface/request.interface';
@@ -40,7 +41,7 @@ export class PlaylistService {
   ): Promise<GetPlaylistResponseData> {
     const playlistRecord: PlaylistVo =
       await this.playlistRepository.getPlaylist(playlist_id);
-    console.log(playlistRecord);
+    if (!playlistRecord) throw NotFoundPlaylistException;
     const songRecords: SongVo[] =
       await this.songViewRepository.getSongsByPlaylistId(playlist_id);
 
