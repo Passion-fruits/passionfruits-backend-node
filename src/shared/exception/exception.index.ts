@@ -9,6 +9,9 @@ export const QueryBadRequest = new BadRequestException('Query Bad Request');
 export const CommentExistException = new BadRequestException(
   'Comment Exist Exception',
 );
+export const PlaylistHasSongExistException = new BadRequestException(
+  'Playlist Already Have Song',
+);
 
 // 401
 export const UnauthorizedTokenException = new UnauthorizedException(
@@ -23,4 +26,7 @@ export const NotFoundProfileException = new NotFoundException(
 export const NotFoundSongException = new NotFoundException('Song Not Found');
 export const NotFoundCommentException = new NotFoundException(
   'Comment Not Found',
+);
+export const NotFoundPlaylistException = new NotFoundException(
+  'Playlist Not Found',
 );
