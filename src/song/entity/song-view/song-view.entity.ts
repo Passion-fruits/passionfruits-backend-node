@@ -7,6 +7,7 @@ import { Song } from '../song.entity';
     connection
       .createQueryBuilder(Song, 'song')
       .innerJoin('song.user', 'user')
+      .innerJoin('song.playlist_has_song', 'playlist_has_song')
       .innerJoin('song.song_genre', 'song_genre')
       .innerJoin('song_genre.genre_type', 'genre_type')
       .innerJoin('user.profile', 'profile')
@@ -26,6 +27,7 @@ import { Song } from '../song.entity';
       .addSelect('genre_type.name', 'genre')
       .addSelect('mood_type.name', 'mood')
       .addSelect('profile.name', 'artist')
+      .addSelect('playlist_has_song.playlist_id', 'playlist_has_song_id')
       .addSelect(
         'COUNT(distinct user_like_song.song_id, user_like_song.user_id)',
         'like',
@@ -35,6 +37,7 @@ import { Song } from '../song.entity';
         'comment',
       )
       .groupBy('song.id')
+      .addGroupBy('playlist_has_song.playlist_id')
       .orderBy('song.id', 'ASC'),
 })
 export class SongView {
@@ -73,6 +76,9 @@ export class SongView {
 
   @ViewColumn()
   artist: string;
+
+  @ViewColumn()
+  playlist_has_song_id: number;
 
   @ViewColumn()
   like: number;
