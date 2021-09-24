@@ -30,3 +30,6 @@ export const NotFoundCommentException = new NotFoundException(
 export const NotFoundPlaylistException = new NotFoundException(
   'Playlist Not Found',
 );
+export const NotFoundPlaylistHasSongException = new NotFoundException(
+  'Playlist Has Song Not Found',
+);
