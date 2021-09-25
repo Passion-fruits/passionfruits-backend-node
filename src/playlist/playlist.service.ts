@@ -17,6 +17,7 @@ import {
   PlaylistVo,
   SongVo,
 } from './dto/get-playlist.dto';
+import { GetUserPlaylistResponseData } from './dto/get-user-playlist.dto';
 import { PlaylistHasSongRepository } from './entity/playlist-has-song.repository';
 import { PlaylistRepository } from './entity/playlist.repository';
 
@@ -88,5 +89,16 @@ export class PlaylistService {
       song_id: dto.song_id,
       playlist_id,
     });
+  }
+
+  public async getUserPlaylist(
+    user_id: number,
+  ): Promise<GetUserPlaylistResponseData[]> {
+    const playlistRecord = await this.playlistRepository.getUserPlaylist(
+      user_id,
+    );
+    if (playlistRecord.length === 0) throw NotFoundPlaylistException;
+
+    return playlistRecord;
   }
 }
