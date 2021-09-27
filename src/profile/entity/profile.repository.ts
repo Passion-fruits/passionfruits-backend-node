@@ -9,8 +9,6 @@ export class ProfileRepository extends Repository<Profile> {
     return await this.createQueryBuilder('profile')
       .innerJoin('profile.user_id', 'user')
       .innerJoin('profile.sns', 'sns')
-      .leftJoin('user.follower', 'follower')
-      .leftJoin('user.following', 'following')
       .select('user.email', 'email')
       .addSelect('profile.name', 'name')
       .addSelect('profile.bio', 'bio')
@@ -19,8 +17,20 @@ export class ProfileRepository extends Repository<Profile> {
       .addSelect('sns.facebook', 'facebook')
       .addSelect('sns.soundcloud', 'soundcloud')
       .addSelect('sns.youtube', 'youtube')
-      .addSelect('COUNT(follower.follower)', 'follower')
-      .addSelect('COUNT(following.following)', 'following')
+      .addSelect((subQuery) => {
+        return subQuery
+          .select('COUNT(*)')
+          .from('user', 'user')
+          .innerJoin('user.follower', 'follower')
+          .where('user.id = :user_id', { user_id });
+      }, 'follower')
+      .addSelect((subQuery) => {
+        return subQuery
+          .select('COUNT(*)')
+          .from('user', 'user')
+          .innerJoin('user.following', 'following')
+          .where('user.id = :user_id', { user_id });
+      }, 'following')
       .where('profile.user_id = :user_id', { user_id })
       .groupBy('user.id')
       .getRawOne();
