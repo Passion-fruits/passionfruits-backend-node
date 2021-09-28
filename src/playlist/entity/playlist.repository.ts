@@ -28,6 +28,7 @@ export class PlaylistRepository extends Repository<Playlist> {
       .addSelect('pl.id', 'playlist_id')
       .addSelect('pl.created_at', 'created_at')
       .addSelect('profile.name', 'author')
+      .addSelect('user.id', 'user_id')
       .addSelect(
         'COUNT(distinct user_like_playlist.playlist_id, user_like_playlist.user_id)',
         'like',
