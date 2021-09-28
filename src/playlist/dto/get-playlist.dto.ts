@@ -9,6 +9,7 @@ export class PlaylistVo {
   like: number;
   cover_url: string;
   playlist_id: number;
+  user_id: number;
   created_at: Date;
 }
 
