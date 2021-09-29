@@ -59,10 +59,10 @@ export class PlaylistService {
     dto: AddSongInPlaylistDto,
     playlist_id: number,
   ): Promise<void> {
-    const playlistRecord = await this.playlistRepository.findOne({
-      id: playlist_id,
-      user: this.request.user.sub,
-    });
+    const playlistRecord = await this.playlistRepository.findMyPlaylist(
+      playlist_id,
+      this.request.user.sub,
+    );
     if (!playlistRecord) throw NotFoundPlaylistException;
     const playlistHasSongRecord = await this.playlistHasSongRepository.findOne({
       song_id: dto.song_id,
@@ -124,7 +124,10 @@ export class PlaylistService {
     playlist_id: number,
     cover_url: string,
   ): Promise<void> {
-    const playlistRecord = await this.playlistRepository.findOne(playlist_id);
+    const playlistRecord = await this.playlistRepository.findMyPlaylist(
+      playlist_id,
+      this.request.user.sub,
+    );
     if (!playlistRecord) throw NotFoundPlaylistException;
     await this.playlistRepository.update(playlist_id, { cover_url });
   }

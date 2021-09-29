@@ -18,6 +18,10 @@ export class PlaylistRepository extends Repository<Playlist> {
     await this.save(newPlaylist);
   }
 
+  public async findMyPlaylist(id: number, user: number): Promise<Playlist> {
+    return await this.findOne({ id, user });
+  }
+
   public async getPlaylist(playlist_id: number): Promise<PlaylistVo> {
     return await this.createQueryBuilder('pl')
       .innerJoin('pl.user', 'user')
