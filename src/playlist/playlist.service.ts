@@ -119,4 +119,13 @@ export class PlaylistService {
 
     return playlistRecord;
   }
+
+  public async modifyCover(
+    playlist_id: number,
+    cover_url: string,
+  ): Promise<void> {
+    const playlistRecord = await this.playlistRepository.findOne(playlist_id);
+    if (!playlistRecord) throw NotFoundPlaylistException;
+    await this.playlistRepository.update(playlist_id, { cover_url });
+  }
 }
