@@ -9,6 +9,7 @@ import {
 } from 'src/shared/exception/exception.index';
 import { IUserReqeust } from 'src/shared/interface/request.interface';
 import { SongViewRepository } from 'src/song/entity/song-view/song-view.repository';
+import { SongRepository } from 'src/song/entity/song.repository';
 import { AddSongInPlaylistDto } from './dto/add-song-in-playlist.dto';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { DeleteSongInPlaylistDto } from './dto/delete-song-in-playlist.dto';
@@ -30,6 +31,8 @@ export class PlaylistService {
     private readonly playlistHasSongRepository: PlaylistHasSongRepository,
     @InjectRepository(SongViewRepository)
     private readonly songViewRepository: SongViewRepository,
+    @InjectRepository(SongRepository)
+    private readonly songRepository: SongRepository,
     @Inject(REQUEST) private readonly request: IUserReqeust,
   ) {}
 
@@ -66,6 +69,21 @@ export class PlaylistService {
       playlist_id,
     });
     if (playlistHasSongRecord) throw PlaylistHasSongExistException;
+    const songRecord = await this.songRepository.findOne(dto.song_id);
+    if (!songRecord) throw NotFoundSongException;
+
+    if (
+      (await this.playlistHasSongRepository.count({
+        where: { playlist_id },
+      })) === 0
+    ) {
+      await this.playlistRepository.update(
+        { id: playlist_id },
+        {
+          cover_url: songRecord.cover_url,
+        },
+      );
+    }
 
     await this.playlistHasSongRepository.addSongInPlaylist(dto, playlist_id);
   }
