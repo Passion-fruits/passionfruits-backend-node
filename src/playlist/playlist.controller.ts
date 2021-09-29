@@ -6,10 +6,17 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Patch,
   Post,
+  Put,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { PlaylistMulterConfigs } from 'src/config/multer';
+import { IMulterFile } from 'src/shared/interface/request.interface';
 import { AddSongInPlaylistDto } from './dto/add-song-in-playlist.dto';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { DeleteSongInPlaylistDto } from './dto/delete-song-in-playlist.dto';
@@ -53,6 +60,17 @@ export class PlaylistController {
     @Body() dto: DeleteSongInPlaylistDto,
   ): Promise<void> {
     await this.playlistService.deleteSongInPlaylist(dto, playlist_id);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @UseInterceptors(FileInterceptor('image', PlaylistMulterConfigs))
+  @Patch(':playlist_id')
+  public async modifyCover(
+    @Param('playlist_id') playlist_id: number,
+    @UploadedFile() file: IMulterFile,
+  ): Promise<{ cover_url: string }> {
+    await this.playlistService.modifyCover(playlist_id, file.location);
+    return { cover_url: file.location };
   }
 
   @Get('profile/:user_id')
