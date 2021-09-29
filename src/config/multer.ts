@@ -25,6 +25,18 @@ export const ProfileMulterConfigs: MulterOptions = {
   limits: { fieldSize: 50 * 1024 * 1024 },
 };
 
+export const PlaylistMulterConfigs: MulterOptions = {
+  storage: multerS3({
+    s3: s3,
+    bucket: process.env.AWS_S3_BUCKET_NAME,
+    acl: 'public-read',
+    key: (req, file: Express.Multer.File, cb) => {
+      cb(null, `playlist/${v4()} ${file.originalname}`);
+    },
+  }),
+  limits: { fieldSize: 50 * 1024 * 1024 },
+};
+
 export const SongMulterConfigs: MulterOptions = {
   storage: diskStorage({
     destination: (req, file, cb) => {
