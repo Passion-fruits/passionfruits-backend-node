@@ -15,9 +15,7 @@ export class LoggerMiddleware implements NestMiddleware {
     const _url = JSON.stringify(tempUrl ? tempUrl : {});
     const _auth = JSON.stringify(tempAuth ? tempAuth.split(' ')[1] : {});
     loggerService.log(
-      `${req.header('x-real-ip')} ${req.header('X-Forwarded-For')} ${req.header(
-        'Host',
-      )} ${_url} ${_query} ${_body} ${_auth}`,
+      `${req.header('X-Forwarded-For')} ${_url} ${_query} ${_body} ${_auth}`,
     );
     next();
   }
