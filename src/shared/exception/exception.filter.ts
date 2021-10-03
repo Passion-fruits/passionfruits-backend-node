@@ -7,10 +7,12 @@ import {
   Logger,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { LoggerService } from 'src/config/logger/logger.service';
 
 @Catch()
 export class HttpErrorFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
+    const logger = new LoggerService();
     const context = host.switchToHttp();
     const request: Request = context.getRequest();
     const response: Response = context.getResponse();
@@ -19,7 +21,7 @@ export class HttpErrorFilter implements ExceptionFilter {
       : HttpStatus.INTERNAL_SERVER_ERROR;
 
     if (status === HttpStatus.INTERNAL_SERVER_ERROR)
-      Logger.error(exception.message);
+      logger.error(exception.message, exception.stack);
     const errorResponse = {
       code: status,
       message:
@@ -27,11 +29,11 @@ export class HttpErrorFilter implements ExceptionFilter {
           ? exception.message
           : 'Interal server error',
     };
-
-    Logger.error(
-      `${request.method} ${request.url}`,
-      JSON.stringify(errorResponse),
-      'ExceptionFilter',
+    logger.error(
+      `${request.method} ${request.url} ${status} ${JSON.stringify(
+        errorResponse,
+      )}`,
+      '',
     );
     response.status(status).json(errorResponse);
   }
