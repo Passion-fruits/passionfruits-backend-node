@@ -8,7 +8,7 @@ export class LoggerMiddleware implements NestMiddleware {
   constructor() {}
   use(req: Request, res: Response, next: Function) {
     const loggerService = new LoggerService();
-    const tempUrl = req.method + ' ' + req.url.split('?')[0];
+    const tempUrl = req.method + ' ' + req.baseUrl;
     const _query = JSON.stringify(req.query ? req.query : {});
     const _body = JSON.stringify(req.body ? req.body : {});
     const _url = JSON.stringify(tempUrl ? tempUrl : {});
