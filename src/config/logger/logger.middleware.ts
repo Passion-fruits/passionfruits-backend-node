@@ -14,9 +14,8 @@ export class LoggerMiddleware implements NestMiddleware {
     const _body = JSON.stringify(req.body ? req.body : {});
     const _url = JSON.stringify(tempUrl ? tempUrl : {});
     const _auth = JSON.stringify(tempAuth ? tempAuth.split(' ')[1] : {});
-
     loggerService.log(
-      `${req.headers['X-Real-IP']} ${_url} ${_query} ${_body} ${_auth}`,
+      `${req.header('x-real-ip')} ${_url} ${_query} ${_body} ${_auth}`,
     );
     next();
   }
