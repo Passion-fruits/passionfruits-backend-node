@@ -30,9 +30,9 @@ export class HttpErrorFilter implements ExceptionFilter {
           : 'Interal server error',
     };
     logger.error(
-      `${request.method} ${request.url} ${status} ${JSON.stringify(
-        errorResponse,
-      )}`,
+      `${new Date().toISOString()} ${request.method} ${
+        request.url
+      } ${status} ${JSON.stringify(errorResponse)}`,
       '',
     );
     response.status(status).json(errorResponse);
