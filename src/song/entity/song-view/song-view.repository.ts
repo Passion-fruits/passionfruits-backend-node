@@ -23,6 +23,7 @@ export class SongViewRepository extends Repository<SongView> {
       .addSelect('view.comment', 'comment')
       .limit(12)
       .offset((page - 1) * 12)
+      .distinct(true)
       .where('view.user_id = :user_id', { user_id })
       .orderBy('view.song_id', 'DESC')
       .getRawMany();
@@ -67,6 +68,7 @@ export class SongViewRepository extends Repository<SongView> {
       .where('view.genre_number = :genre', { genre })
       .limit(size)
       .offset((page - 1) * size)
+      .distinct(true)
       .orderBy(`view.${sort}`, order)
       .getRawMany();
   }
@@ -93,6 +95,7 @@ export class SongViewRepository extends Repository<SongView> {
       .where('view.genre_number = :genre', { genre })
       .limit(12)
       .offset((page - 1) * 12)
+      .distinct(true)
       .orderBy(`view.${sort}`, order)
       .getRawMany();
   }
