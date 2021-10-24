@@ -9,6 +9,7 @@ import {
   Patch,
   Post,
   Put,
+  Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -21,6 +22,7 @@ import { AddSongInPlaylistDto } from './dto/add-song-in-playlist.dto';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { DeleteSongInPlaylistDto } from './dto/delete-song-in-playlist.dto';
 import { GetPlaylistResponseData } from './dto/get-playlist.dto';
+import { GetRandomPlaylistResponseData } from './dto/get-random-playlist.dto';
 import { GetUserPlaylistResponseData } from './dto/get-user-playlist.dto';
 import { PlaylistService } from './playlist.service';
 
@@ -33,6 +35,14 @@ export class PlaylistController {
   @Post()
   public createPlaylist(@Body() dto: CreatePlaylistDto): void {
     this.playlistService.createPlaylist(dto);
+  }
+
+  @Get('random')
+  public getRandomPlaylist(
+    @Query('page') page: number,
+    @Query('size') size: number,
+  ): Promise<GetRandomPlaylistResponseData> {
+    return this.playlistService.getRandomPlaylist(page, size);
   }
 
   @Get(':playlist_id')

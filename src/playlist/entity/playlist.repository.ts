@@ -1,6 +1,10 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { CreatePlaylistDto } from '../dto/create-playlist.dto';
 import { PlaylistVo } from '../dto/get-playlist.dto';
+import {
+  GetRandomPlaylistResponseData,
+  RandomPlaylistVo,
+} from '../dto/get-random-playlist.dto';
 import { GetUserPlaylistResponseData } from '../dto/get-user-playlist.dto';
 import { Playlist } from './playlist.entity';
 
@@ -59,6 +63,24 @@ export class PlaylistRepository extends Repository<Playlist> {
       )
       .where('pl.user = :user_id', { user_id })
       .groupBy('pl.id')
+      .getRawMany();
+  }
+
+  public getRandomPlaylist(
+    page: number,
+    size: number,
+  ): Promise<RandomPlaylistVo[]> {
+    return this.createQueryBuilder('pl')
+      .innerJoin('pl.user', 'user')
+      .innerJoin('user.profile', 'profile')
+      .select('pl.name', 'name')
+      .addSelect('profile.name', 'author')
+      .addSelect('pl.cover_url', 'cover_url')
+      .addSelect('pl.id', 'playlist_id')
+      .addSelect('user.id', 'user_id')
+      .limit(size)
+      .offset((page - 1) * size)
+      .orderBy('RAND()')
       .getRawMany();
   }
 }

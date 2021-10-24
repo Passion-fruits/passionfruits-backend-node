@@ -6,6 +6,7 @@ import {
   NotFoundPlaylistHasSongException,
   NotFoundSongException,
   PlaylistHasSongExistException,
+  QueryBadRequest,
 } from 'src/shared/exception/exception.index';
 import { IUserReqeust } from 'src/shared/interface/request.interface';
 import { SongViewRepository } from 'src/song/entity/song-view/song-view.repository';
@@ -18,6 +19,7 @@ import {
   PlaylistVo,
   SongVo,
 } from './dto/get-playlist.dto';
+import { GetRandomPlaylistResponseData } from './dto/get-random-playlist.dto';
 import { GetUserPlaylistResponseData } from './dto/get-user-playlist.dto';
 import { PlaylistHasSongRepository } from './entity/playlist-has-song.repository';
 import { PlaylistRepository } from './entity/playlist.repository';
@@ -130,5 +132,20 @@ export class PlaylistService {
     );
     if (!playlistRecord) throw NotFoundPlaylistException;
     await this.playlistRepository.update(playlist_id, { cover_url });
+  }
+
+  public async getRandomPlaylist(
+    page: number,
+    size: number,
+  ): Promise<GetRandomPlaylistResponseData> {
+    if (isNaN(page) || isNaN(size)) throw QueryBadRequest;
+    if (page <= 0 || size <= 0) throw QueryBadRequest;
+
+    const playlistRecords = await this.playlistRepository.getRandomPlaylist(
+      page,
+      size,
+    );
+    if (playlistRecords.length === 0) NotFoundPlaylistException;
+    return { playlist: playlistRecords };
   }
 }
