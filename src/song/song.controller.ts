@@ -20,6 +20,8 @@ import { GetMySongsResponseData } from './dto/get-my-songs.dto';
 import { GetSongResponseData } from './dto/get-song.dto';
 import { GetSongsByUserIdResponseData } from './dto/get-songs-by-user-id.dto';
 import { GetStreamResponseData } from './dto/get-stream.dto';
+import { GetFavoriteSongResponseData } from './dto/get-favorite-songs.dto';
+import { GetRecentSongResponseData } from './dto/get-recent-song.dto';
 
 @Controller('song')
 export class SongController {
@@ -65,6 +67,14 @@ export class SongController {
     @Query('sort') sort: number,
   ): Promise<GetMySongsResponseData[]> {
     return await this.songService.getFeed(genre, page, sort);
+  }
+
+  @Get('recent')
+  public getRecentSongs(
+    @Query('page') page: number,
+    @Query('size') size: number,
+  ): Promise<GetRecentSongResponseData> {
+    return this.songService.getRecentSong(page, size);
   }
 
   @Get(':song_id')
