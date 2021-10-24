@@ -20,7 +20,6 @@ import { GetMySongsResponseData } from './dto/get-my-songs.dto';
 import { GetSongResponseData } from './dto/get-song.dto';
 import { GetSongsByUserIdResponseData } from './dto/get-songs-by-user-id.dto';
 import { GetStreamResponseData } from './dto/get-stream.dto';
-import { GetFavoriteSongResponseData } from './dto/get-favorite-songs.dto';
 import { GetRecentSongResponseData } from './dto/get-recent-song.dto';
 
 @Controller('song')
