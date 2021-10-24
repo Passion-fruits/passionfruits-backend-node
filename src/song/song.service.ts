@@ -25,6 +25,7 @@ import { SortType } from 'src/shared/entity/sort/sort-type.entity';
 import { SortTypeRepository } from 'src/shared/entity/sort/sort-type.repository';
 import { GetSongsByUserIdResponseData } from './dto/get-songs-by-user-id.dto';
 import { GetStreamResponseData } from './dto/get-stream.dto';
+import { GetRecentSongResponseData } from './dto/get-recent-song.dto';
 
 @Injectable({ scope: Scope.REQUEST })
 export class SongService {
@@ -53,8 +54,9 @@ export class SongService {
     sort: number,
     size: number,
   ): Promise<GetStreamResponseData> {
-    if (isNaN(genre) || isNaN(page) || isNaN(sort)) throw QueryBadRequest;
-    if (page <= 0) throw QueryBadRequest;
+    if (isNaN(genre) || isNaN(page) || isNaN(sort) || isNaN(size))
+      throw QueryBadRequest;
+    if (page <= 0 || size <= 0) throw QueryBadRequest;
     const sortTypeRecords = await this.sortTypeRepository.findOne(sort);
     if (!sortTypeRecords) throw QueryBadRequest;
 
@@ -68,6 +70,20 @@ export class SongService {
     const max_song = await this.songGenreRepository.getCountsByGenre(genre);
     if (songRecords.length === 0) throw NotFoundSongException;
     return { max_song, songs: songRecords };
+  }
+
+  public async getRecentSong(
+    page: number,
+    size: number,
+  ): Promise<GetRecentSongResponseData> {
+    if (isNaN(page) || isNaN(size)) throw QueryBadRequest;
+    if (page <= 0 || size <= 0) throw QueryBadRequest;
+
+    const songRecords = await this.songViewRepository.getRecentSong(page, size);
+    if (songRecords.length === 0) throw NotFoundSongException;
+    const max_song = await this.songRepository.count();
+
+    return { max_song, song: songRecords };
   }
 
   public async getFeed(
@@ -122,7 +138,6 @@ export class SongService {
     await this.moodRepository.createMood(songRecord.id, dto.mood);
     await this.songGenreRepository.createSongGenre(songRecord.id, dto.genre);
 
-    // 음악 자르기
     MP3Cutter.cut({
       src: `${filepath}song/${song_url}`,
       target: `${filepath}/short/${song_url}`,

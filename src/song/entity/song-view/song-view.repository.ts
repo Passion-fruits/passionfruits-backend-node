@@ -3,6 +3,7 @@ import { GetSongResponseData } from '../../../song/dto/get-song.dto';
 import { EntityRepository, Repository } from 'typeorm';
 import { SongView } from './song-view.entity';
 import { SongVo } from 'src/playlist/dto/get-playlist.dto';
+import { RecentSongVo } from 'src/song/dto/get-recent-song.dto';
 
 @EntityRepository(SongView)
 export class SongViewRepository extends Repository<SongView> {
@@ -70,6 +71,24 @@ export class SongViewRepository extends Repository<SongView> {
       .offset((page - 1) * size)
       .distinct(true)
       .orderBy(`view.${sort}`, order)
+      .getRawMany();
+  }
+
+  public getRecentSong(page: number, size: number): Promise<RecentSongVo[]> {
+    return this.createQueryBuilder('view')
+      .select('view.song_id', 'song_id')
+      .addSelect('view.user_id', 'user_id')
+      .addSelect('view.cover_url', 'cover_url')
+      .addSelect('view.song_url', 'song_url')
+      .addSelect('view.title', 'title')
+      .addSelect('view.genre', 'genre')
+      .addSelect('view.artist', 'artist')
+      .addSelect('view.like', 'like')
+      .addSelect('view.created_at', 'created_at')
+      .limit(size)
+      .offset((page - 1) * size)
+      .distinct(true)
+      .orderBy('view.created_at', 'DESC')
       .getRawMany();
   }
 
