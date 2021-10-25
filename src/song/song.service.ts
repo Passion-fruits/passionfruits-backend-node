@@ -26,6 +26,7 @@ import { SortTypeRepository } from 'src/shared/entity/sort/sort-type.repository'
 import { GetSongsByUserIdResponseData } from './dto/get-songs-by-user-id.dto';
 import { GetStreamResponseData } from './dto/get-stream.dto';
 import { GetRecentSongResponseData } from './dto/get-recent-song.dto';
+import { GetPopularSongResponseData } from './dto/get-popular-songs.dto';
 
 @Injectable({ scope: Scope.REQUEST })
 export class SongService {
@@ -80,6 +81,23 @@ export class SongService {
     if (page <= 0 || size <= 0) throw QueryBadRequest;
 
     const songRecords = await this.songViewRepository.getRecentSong(page, size);
+    if (songRecords.length === 0) throw NotFoundSongException;
+    const max_song = await this.songRepository.count();
+
+    return { max_song, song: songRecords };
+  }
+
+  public async getPopularSong(
+    page: number,
+    size: number,
+  ): Promise<GetPopularSongResponseData> {
+    if (isNaN(page) || isNaN(size)) throw QueryBadRequest;
+    if (page <= 0 || size <= 0) throw QueryBadRequest;
+
+    const songRecords = await this.songViewRepository.getPopularSong(
+      page,
+      size,
+    );
     if (songRecords.length === 0) throw NotFoundSongException;
     const max_song = await this.songRepository.count();
 
