@@ -12,4 +12,5 @@ export class RecentSongVo {
   genre: string;
   artist: string;
   like: number;
+  created_at: Date;
 }
