@@ -19,6 +19,7 @@ import {
   PlaylistVo,
   SongVo,
 } from './dto/get-playlist.dto';
+import { GetPopularPlaylistResponseData } from './dto/get-popular-playlist.dto';
 import { GetRandomPlaylistResponseData } from './dto/get-random-playlist.dto';
 import { GetUserPlaylistResponseData } from './dto/get-user-playlist.dto';
 import { PlaylistHasSongRepository } from './entity/playlist-has-song.repository';
@@ -142,6 +143,21 @@ export class PlaylistService {
     if (page <= 0 || size <= 0) throw QueryBadRequest;
 
     const playlistRecords = await this.playlistRepository.getRandomPlaylist(
+      page,
+      size,
+    );
+    if (playlistRecords.length === 0) NotFoundPlaylistException;
+    return { playlist: playlistRecords };
+  }
+
+  public async getPopularPlaylist(
+    page: number,
+    size: number,
+  ): Promise<GetPopularPlaylistResponseData> {
+    if (isNaN(page) || isNaN(size)) throw QueryBadRequest;
+    if (page <= 0 || size <= 0) throw QueryBadRequest;
+
+    const playlistRecords = await this.playlistRepository.getPopularPlaylist(
       page,
       size,
     );
