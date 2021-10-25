@@ -4,6 +4,7 @@ import { EntityRepository, Repository } from 'typeorm';
 import { SongView } from './song-view.entity';
 import { SongVo } from 'src/playlist/dto/get-playlist.dto';
 import { RecentSongVo } from 'src/song/dto/get-recent-song.dto';
+import { PopularSongVo } from 'src/song/dto/get-popular-songs.dto';
 
 @EntityRepository(SongView)
 export class SongViewRepository extends Repository<SongView> {
@@ -89,6 +90,27 @@ export class SongViewRepository extends Repository<SongView> {
       .offset((page - 1) * size)
       .distinct(true)
       .orderBy('view.created_at', 'DESC')
+      .getRawMany();
+  }
+
+  public getPopularSong(page: number, size: number): Promise<PopularSongVo[]> {
+    return this.createQueryBuilder('view')
+      .select(
+        '(view.like + 1) / (TO_DAYS(now()) - TO_DAYS(view.created_at) + 1)',
+        'score',
+      )
+      .addSelect('view.song_id', 'song_id')
+      .addSelect('view.user_id', 'user_id')
+      .addSelect('view.cover_url', 'cover_url')
+      .addSelect('view.song_url', 'song_url')
+      .addSelect('view.title', 'title')
+      .addSelect('view.genre', 'genre')
+      .addSelect('view.artist', 'artist')
+      .addSelect('view.like', 'like')
+      .limit(size)
+      .offset((page - 1) * size)
+      .distinct(true)
+      .orderBy('score', 'DESC')
       .getRawMany();
   }
 

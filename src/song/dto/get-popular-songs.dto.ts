@@ -1,9 +1,10 @@
-export class GetRecentSongResponseData {
+export class GetPopularSongResponseData {
   max_song: number;
-  song: RecentSongVo[];
+  song: PopularSongVo[];
 }
 
-export class RecentSongVo {
+export class PopularSongVo {
+  score: number;
   song_id: number;
   user_id: number;
   cover_url: string;
@@ -12,5 +13,4 @@ export class RecentSongVo {
   genre: string;
   artist: string;
   like: number;
-  created_at: Date;
 }

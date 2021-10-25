@@ -21,6 +21,7 @@ import { GetSongResponseData } from './dto/get-song.dto';
 import { GetSongsByUserIdResponseData } from './dto/get-songs-by-user-id.dto';
 import { GetStreamResponseData } from './dto/get-stream.dto';
 import { GetRecentSongResponseData } from './dto/get-recent-song.dto';
+import { GetPopularSongResponseData } from './dto/get-popular-songs.dto';
 
 @Controller('song')
 export class SongController {
@@ -74,6 +75,14 @@ export class SongController {
     @Query('size') size: number,
   ): Promise<GetRecentSongResponseData> {
     return this.songService.getRecentSong(page, size);
+  }
+
+  @Get('popular')
+  public getPopularSongs(
+    @Query('page') page: number,
+    @Query('size') size: number,
+  ): Promise<GetPopularSongResponseData> {
+    return this.songService.getPopularSong(page, size);
   }
 
   @Get(':song_id')
