@@ -1,6 +1,7 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { CreatePlaylistDto } from '../dto/create-playlist.dto';
 import { PlaylistVo } from '../dto/get-playlist.dto';
+import { PopularPlaylistVo } from '../dto/get-popular-playlist.dto';
 import {
   GetRandomPlaylistResponseData,
   RandomPlaylistVo,
@@ -63,6 +64,30 @@ export class PlaylistRepository extends Repository<Playlist> {
       )
       .where('pl.user = :user_id', { user_id })
       .groupBy('pl.id')
+      .getRawMany();
+  }
+
+  public getPopularPlaylist(
+    page: number,
+    size: number,
+  ): Promise<PopularPlaylistVo[]> {
+    return this.createQueryBuilder('pl')
+      .innerJoin('pl.user', 'user')
+      .innerJoin('user.profile', 'profile')
+      .leftJoin('pl.user_like_playlist', 'user_like_playlist')
+      .select(
+        '(COUNT(distinct user_like_playlist.playlist_id, user_like_playlist.user_id) + 1) / (TO_DAYS(now()) - TO_DAYS(pl.created_at) + 1)',
+        'score',
+      )
+      .addSelect('pl.name', 'name')
+      .addSelect('profile.name', 'author')
+      .addSelect('pl.cover_url', 'cover_url')
+      .addSelect('pl.id', 'playlist_id')
+      .addSelect('user.id', 'user_id')
+      .limit(size)
+      .offset((page - 1) * size)
+      .groupBy('pl.id')
+      .orderBy('score', 'DESC')
       .getRawMany();
   }
 
