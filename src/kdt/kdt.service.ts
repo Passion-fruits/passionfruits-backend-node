@@ -36,7 +36,7 @@ export class KdtService {
       },
     }).then(async (res) => {
       const kdtAmount = (amount * 10) / 12 / 100;
-      await this.kdtRepository.accessPayment(kdtAmount, this.request.user.sub);
+      await this.kdtRepository.successPayment(kdtAmount, this.request.user.sub);
       await this.kdtHistoryRepository.accessPayment(
         orderId,
         paymentKey,

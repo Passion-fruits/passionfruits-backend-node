@@ -4,7 +4,7 @@ import { Kdt } from './kdt.entity';
 
 @EntityRepository(Kdt)
 export class KdtRepository extends Repository<Kdt> {
-  public async accessPayment(
+  public async successPayment(
     kdtAmount: number,
     user_id: number,
   ): Promise<void> {
