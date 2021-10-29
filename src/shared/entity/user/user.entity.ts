@@ -14,6 +14,7 @@ import { Playlist } from 'src/playlist/entity/playlist.entity';
 import { UserLikePlaylist } from 'src/playlist/entity/user-like-playlist.entity';
 import { Kdt } from '../../../kdt/entity/kdt.entity';
 import { KdtHistory } from 'src/kdt/entity/kdt-history.entity';
+import { History } from 'src/history/entity/history.entity';
 
 @Entity('user')
 export class User {
@@ -52,6 +53,9 @@ export class User {
 
   @OneToMany(() => Follow, (follow) => follow.follower)
   follower: Follow[];
+
+  @OneToMany(() => History, (history) => history.user_id)
+  history: History[];
 
   @OneToMany(() => Follow, (follow) => follow.following)
   following: Follow[];
