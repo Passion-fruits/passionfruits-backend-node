@@ -12,6 +12,8 @@ import { UserCommentSong } from '../../../comment/entity/user-comment-song.entit
 import { Follow } from '../follow/follow.entity';
 import { Playlist } from 'src/playlist/entity/playlist.entity';
 import { UserLikePlaylist } from 'src/playlist/entity/user-like-playlist.entity';
+import { Kdt } from '../../../kdt/entity/kdt.entity';
+import { KdtHistory } from 'src/kdt/entity/kdt-history.entity';
 
 @Entity('user')
 export class User {
@@ -24,8 +26,14 @@ export class User {
   @OneToOne(() => Profile, (profile) => profile.user_id)
   profile: Profile;
 
+  @OneToOne(() => Kdt, (kdt) => kdt.user_id)
+  kdt: Kdt;
+
   @OneToMany(() => Song, (song) => song.user)
   song: Song[];
+
+  @OneToMany(() => KdtHistory, (kdtHistory) => kdtHistory.user)
+  kdt_history: KdtHistory[];
 
   @OneToMany(() => UserLikeSong, (userLikeSong) => userLikeSong.user_id)
   user_like_song: UserLikeSong[];
