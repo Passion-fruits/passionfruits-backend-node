@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -16,7 +17,7 @@ export class KdtController {
 
   @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.CREATED)
-  @Post()
+  @Get()
   public successPayment(
     @Query('paymentKey') paymentKey: string,
     @Query('orderId') orderId: string,
