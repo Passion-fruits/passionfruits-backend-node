@@ -12,6 +12,7 @@ import { WinstonModule } from 'nest-winston';
 import { LoggerMiddleware } from './config/logger/logger.middleware';
 import { ProfileController } from './profile/profile.controller';
 import { SongController } from './song/song.controller';
+import { SearchModule } from './search/search.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { SongController } from './song/song.controller';
     CommentModule,
     PlaylistModule,
     WinstonModule.forRoot({}),
+    SearchModule,
   ],
   providers: [
     JwtStrategy,

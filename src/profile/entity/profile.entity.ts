@@ -1,5 +1,12 @@
 import { User } from '../../shared/entity/user/user.entity';
-import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryColumn,
+} from 'typeorm';
 import { Sns } from './sns.entity';
 
 @Entity('profile')
@@ -17,6 +24,9 @@ export class Profile {
 
   @Column({ length: 255 })
   image_path: string;
+
+  @CreateDateColumn()
+  created_at: Date;
 
   @OneToOne(() => Sns, (sns) => sns.profile_user_id)
   sns: Sns;
