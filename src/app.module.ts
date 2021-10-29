@@ -13,6 +13,7 @@ import { LoggerMiddleware } from './config/logger/logger.middleware';
 import { ProfileController } from './profile/profile.controller';
 import { SongController } from './song/song.controller';
 import { SearchModule } from './search/search.module';
+import { KdtModule } from './kdt/kdt.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { SearchModule } from './search/search.module';
     PlaylistModule,
     WinstonModule.forRoot({}),
     SearchModule,
+    KdtModule,
   ],
   providers: [
     JwtStrategy,
