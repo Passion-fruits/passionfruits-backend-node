@@ -12,6 +12,9 @@ export const CommentExistException = new BadRequestException(
 export const PlaylistHasSongExistException = new BadRequestException(
   'Playlist Already Have Song',
 );
+export const AlreadyPaymentedException = new BadRequestException(
+  'Already Paymented',
+);
 
 // 401
 export const UnauthorizedTokenException = new UnauthorizedException(
