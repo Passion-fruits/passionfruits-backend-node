@@ -19,7 +19,7 @@ export class HistoryRepository extends Repository<History> {
       .update(History)
       .set({ created_at: new Date() })
       .where('user_id = :user_id and song_id = :song_id', {
-        user_id: history.song_id,
+        user_id: history.user_id,
         song_id: history.song_id,
       })
       .execute();
