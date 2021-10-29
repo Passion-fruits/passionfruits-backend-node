@@ -14,6 +14,7 @@ import { ProfileController } from './profile/profile.controller';
 import { SongController } from './song/song.controller';
 import { SearchModule } from './search/search.module';
 import { KdtModule } from './kdt/kdt.module';
+import { HistoryModule } from './history/history.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { KdtModule } from './kdt/kdt.module';
     WinstonModule.forRoot({}),
     SearchModule,
     KdtModule,
+    HistoryModule,
   ],
   providers: [
     JwtStrategy,
