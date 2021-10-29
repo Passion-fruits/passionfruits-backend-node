@@ -3,6 +3,7 @@ import { REQUEST } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
 import { IUserReqeust } from 'src/shared/interface/request.interface';
+import { KdtHistory } from './entity/kdt-history.entity';
 import { KdtHistoryRepository } from './entity/kdt-history.repository';
 import { Kdt } from './entity/kdt.entity';
 import { KdtRepository } from './entity/kdt.repository';
@@ -11,16 +12,16 @@ import { KdtRepository } from './entity/kdt.repository';
 export class KdtService {
   constructor(
     @InjectRepository(Kdt) private readonly kdtRepository: KdtRepository,
-    @InjectRepository(KdtRepository)
+    @InjectRepository(KdtHistory)
     private readonly kdtHistoryRepository: KdtHistoryRepository,
     @Inject(REQUEST) private readonly request: IUserReqeust,
   ) {}
 
-  public successPayment(
+  public async successPayment(
     paymentKey: string,
     orderId: string,
     amount: number,
-  ): void {
+  ): Promise<void> {
     axios({
       method: 'post',
       url: `https://api.tosspayments.com/v1/payments/${paymentKey}`,
@@ -37,13 +38,13 @@ export class KdtService {
     }).then(async (res) => {
       const kdtAmount = (amount * 10) / 12 / 100;
       await this.kdtRepository.successPayment(kdtAmount, this.request.user.sub);
-      await this.kdtHistoryRepository.accessPayment(
+
+      await this.kdtHistoryRepository.successPayment(
         orderId,
         paymentKey,
         kdtAmount,
         this.request.user.sub,
       );
-      console.log(res);
     });
   }
 }
