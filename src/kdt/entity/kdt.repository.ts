@@ -1,4 +1,3 @@
-import { User } from '../../shared/entity/user/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { Kdt } from './kdt.entity';
 
@@ -8,7 +7,10 @@ export class KdtRepository extends Repository<Kdt> {
     kdtAmount: number,
     user_id: number,
   ): Promise<void> {
-    const kdtRecord = await this.findOne({ user_id });
-    await this.update(kdtRecord, { add_kdt: kdtRecord.add_kdt + kdtAmount });
+    await this.createQueryBuilder()
+      .update(Kdt)
+      .set({ add_kdt: () => `add_kdt + ${kdtAmount}` })
+      .where('user_id = :user_id', { user_id })
+      .execute();
   }
 }

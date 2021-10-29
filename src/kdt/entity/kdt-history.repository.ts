@@ -3,7 +3,7 @@ import { KdtHistory } from './kdt-history.entity';
 
 @EntityRepository(KdtHistory)
 export class KdtHistoryRepository extends Repository<KdtHistory> {
-  public async accessPayment(
+  public async successPayment(
     order_id: string,
     payment_key: string,
     amount: number,

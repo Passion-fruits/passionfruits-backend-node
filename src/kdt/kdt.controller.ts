@@ -18,11 +18,11 @@ export class KdtController {
   @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.CREATED)
   @Post()
-  public successPayment(
+  public async successPayment(
     @Query('paymentKey') paymentKey: string,
     @Query('orderId') orderId: string,
     @Query('amount') amount: number,
-  ): void {
-    this.kdtService.successPayment(paymentKey, orderId, amount);
+  ): Promise<void> {
+    await this.kdtService.successPayment(paymentKey, orderId, amount);
   }
 }

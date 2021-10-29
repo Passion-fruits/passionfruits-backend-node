@@ -11,7 +11,7 @@ import { KdtType } from './kdt-type.entity';
 
 @Entity('kdt_history')
 export class KdtHistory {
-  @PrimaryColumn({ type: 'binary', length: 16 })
+  @PrimaryColumn({ type: 'char', length: 36 })
   order_id: string;
 
   @CreateDateColumn()
