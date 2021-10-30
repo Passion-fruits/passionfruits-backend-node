@@ -12,6 +12,7 @@ export class KdtHistoryRepository extends Repository<KdtHistory> {
     payment_key: string,
     amount: number,
     user: number,
+    tx_hash: string,
   ): Promise<void> {
     let newKdtHistory: KdtHistory;
     newKdtHistory = this.create({
@@ -19,6 +20,7 @@ export class KdtHistoryRepository extends Repository<KdtHistory> {
       payment_key,
       amount,
       user,
+      tx_hash,
       kdt_type: 1,
     });
     await this.save(newKdtHistory);
