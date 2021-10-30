@@ -14,7 +14,7 @@ import { History } from '../history.entity';
       .addSelect('song.cover_url', 'cover_url')
       .addSelect('song.song_url', 'song_url')
       .addSelect('song.title', 'title')
-      .addSelect('song.created_at', 'created_at')
+      .addSelect('history.created_at', 'created_at')
       .addSelect('profile.name', 'artist'),
 })
 export class HistoryView {
