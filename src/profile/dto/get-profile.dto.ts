@@ -10,4 +10,5 @@ export class GetProfileResponseData {
   is_mine: boolean;
   follower: number;
   following: number;
+  wallet: string;
 }
