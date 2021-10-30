@@ -17,6 +17,7 @@ export class ProfileRepository extends Repository<Profile> {
       .addSelect('sns.facebook', 'facebook')
       .addSelect('sns.soundcloud', 'soundcloud')
       .addSelect('sns.youtube', 'youtube')
+      .addSelect('profile.wallet', 'wallet')
       .addSelect((subQuery) => {
         return subQuery
           .select('COUNT(*)')
