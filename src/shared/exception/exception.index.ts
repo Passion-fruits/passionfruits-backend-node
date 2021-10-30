@@ -36,3 +36,6 @@ export const NotFoundPlaylistException = new NotFoundException(
 export const NotFoundPlaylistHasSongException = new NotFoundException(
   'Playlist Has Song Not Found',
 );
+export const NotFoundKdtHistoryException = new NotFoundException(
+  'Kdt History Not Found',
+);
