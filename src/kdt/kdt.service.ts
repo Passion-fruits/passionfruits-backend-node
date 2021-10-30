@@ -6,7 +6,7 @@ import { KIP7 } from 'src/config/caver';
 import { AlreadyPaymentedException } from 'src/shared/exception/exception.index';
 import { IUserReqeust } from 'src/shared/interface/request.interface';
 import { GetKdtDetailResponseData } from './dto/get-kdt-detail.dto';
-import { SuccessPaymentRequest } from './dto/success-payment.dto';
+import { SuccessPaymentDto } from './dto/success-payment.dto';
 import { KdtHistory } from './entity/kdt-history.entity';
 import { KdtHistoryRepository } from './entity/kdt-history.repository';
 import { Kdt } from './entity/kdt.entity';
@@ -21,7 +21,7 @@ export class KdtService {
     @Inject(REQUEST) private readonly request: IUserReqeust,
   ) {}
 
-  public async successPayment(dto: SuccessPaymentRequest): Promise<void> {
+  public async successPayment(dto: SuccessPaymentDto): Promise<void> {
     try {
       await axios({
         method: 'post',

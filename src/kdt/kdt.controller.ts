@@ -10,7 +10,8 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GetKdtDetailResponseData } from './dto/get-kdt-detail.dto';
-import { SuccessPaymentRequest } from './dto/success-payment.dto';
+import { SuccessPaymentDto } from './dto/success-payment.dto';
+
 import { KdtService } from './kdt.service';
 
 @Controller('kdt')
@@ -20,9 +21,7 @@ export class KdtController {
   @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.CREATED)
   @Post()
-  public async successPayment(
-    @Body() dto: SuccessPaymentRequest,
-  ): Promise<void> {
+  public async successPayment(@Body() dto: SuccessPaymentDto): Promise<void> {
     await this.kdtService.successPayment(dto);
   }
 

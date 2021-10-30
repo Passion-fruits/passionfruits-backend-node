@@ -1,6 +1,6 @@
-import { IsString } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 
-export class SuccessPaymentRequest {
+export class SuccessPaymentDto {
   @IsString()
   payment_key: string;
 
@@ -10,5 +10,6 @@ export class SuccessPaymentRequest {
   @IsString()
   to_address: string;
 
+  @IsNumber()
   amount: number;
 }
