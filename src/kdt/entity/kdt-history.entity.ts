@@ -23,6 +23,9 @@ export class KdtHistory {
   @Column()
   amount: number;
 
+  @Column({ length: 150 })
+  tx_hash: string;
+
   @ManyToOne(() => User, (user) => user.kdt_history)
   @JoinColumn({ name: 'user_id' })
   user: number;
