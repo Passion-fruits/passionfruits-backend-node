@@ -3,9 +3,13 @@ import { REQUEST } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
 import { KIP7 } from 'src/config/caver';
-import { AlreadyPaymentedException } from 'src/shared/exception/exception.index';
+import {
+  AlreadyPaymentedException,
+  NotFoundKdtHistoryException,
+} from 'src/shared/exception/exception.index';
 import { IUserReqeust } from 'src/shared/interface/request.interface';
 import { GetKdtDetailResponseData } from './dto/get-kdt-detail.dto';
+import { GetKdtHistoryResponseData } from './dto/get-kdt-history.dto';
 import { SuccessPaymentDto } from './dto/success-payment.dto';
 import { KdtHistory } from './entity/kdt-history.entity';
 import { KdtHistoryRepository } from './entity/kdt-history.repository';
@@ -67,5 +71,13 @@ export class KdtService {
       add_kdt: parseInt(res.add_kdt.toString()),
       donate_kdt: parseInt(res.donate_kdt.toString()),
     };
+  }
+
+  public async getKdtHistory(): Promise<GetKdtHistoryResponseData> {
+    const historyRecords = await this.kdtHistoryRepository.getKdtHistory(
+      this.request.user.sub,
+    );
+    if (historyRecords.length === 0) throw NotFoundKdtHistoryException;
+    return { history: historyRecords };
   }
 }
