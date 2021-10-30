@@ -3,7 +3,10 @@ import {
   Controller,
   Get,
   Headers,
+  HttpCode,
+  HttpStatus,
   Param,
+  Patch,
   Put,
   UploadedFile,
   UseGuards,
@@ -48,5 +51,12 @@ export class ProfileController {
   ): Promise<{ image_path: string }> {
     await this.profileService.modifyProfileImage(file.location);
     return { image_path: file.location };
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Patch('wallet')
+  public async postWallet(@Body('wallet') wallet: string): Promise<void> {
+    await this.profileService.postWallet(wallet);
   }
 }

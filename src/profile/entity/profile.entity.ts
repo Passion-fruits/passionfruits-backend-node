@@ -28,6 +28,9 @@ export class Profile {
   @CreateDateColumn()
   created_at: Date;
 
+  @Column({ length: 100, nullable: true })
+  wallet: string;
+
   @OneToOne(() => Sns, (sns) => sns.profile_user_id)
   sns: Sns;
 }
