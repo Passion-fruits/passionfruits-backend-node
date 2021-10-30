@@ -65,6 +65,14 @@ export class ProfileService {
     await this.profileRepository.update(profileRecord, { image_path });
   }
 
+  public async postWallet(wallet: string): Promise<void> {
+    const profileRecord = await this.profileRepository.findOne(
+      this.request.user.sub,
+    );
+    if (!profileRecord) throw NotFoundProfileException;
+    await this.profileRepository.update(this.request.user.sub, { wallet });
+  }
+
   private async verifyUser(user_id: number, token: string): Promise<boolean> {
     try {
       if (!token) return false;
