@@ -46,6 +46,17 @@ export class KdtService {
     }
 
     const kdtAmount = (dto.amount * 10) / 12 / 100;
+
+    const txRes = await KIP7.transfer(
+      dto.to_address,
+      1000000000000000000 * kdtAmount,
+      {
+        from: process.env.FEE_PAYER_ADDRESS,
+        feeDelegation: true,
+        feePayer: process.env.FEE_PAYER_ADDRESS,
+      },
+    );
+
     await this.kdtRepository.successPayment(kdtAmount, this.request.user.sub);
 
     await this.kdtHistoryRepository.successPayment(
@@ -53,13 +64,8 @@ export class KdtService {
       dto.payment_key,
       kdtAmount,
       this.request.user.sub,
+      txRes.events.Transfer.transactionHash,
     );
-
-    KIP7.transfer(dto.to_address, 1000000000000000000 * kdtAmount, {
-      from: process.env.FEE_PAYER_ADDRESS,
-      feeDelegation: true,
-      feePayer: process.env.FEE_PAYER_ADDRESS,
-    }).then(console.log);
   }
 
   public async getKdtDetail(): Promise<GetKdtDetailResponseData> {
