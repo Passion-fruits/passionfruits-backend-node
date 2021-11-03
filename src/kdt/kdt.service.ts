@@ -3,6 +3,8 @@ import { REQUEST } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
 import { caver, KIP7 } from 'src/config/caver';
+import { Profile } from 'src/profile/entity/profile.entity';
+import { ProfileRepository } from 'src/profile/entity/profile.repository';
 import {
   AlreadyPaymentedException,
   NotFoundKdtHistoryException,
@@ -24,6 +26,8 @@ export class KdtService {
     @InjectRepository(Kdt) private readonly kdtRepository: KdtRepository,
     @InjectRepository(KdtHistory)
     private readonly kdtHistoryRepository: KdtHistoryRepository,
+    @InjectRepository(Profile)
+    private readonly profileRepository: ProfileRepository,
     @Inject(REQUEST) private readonly request: IUserReqeust,
   ) {}
 
@@ -47,10 +51,14 @@ export class KdtService {
       throw AlreadyPaymentedException;
     }
 
+    const userAccount = await this.profileRepository.findOne({
+      select: ['wallet'],
+      where: { user_id: this.request.user.sub },
+    });
     const kdtAmount = (dto.amount * 10) / 12 / 100;
 
     const txRes = await KIP7.transfer(
-      dto.to_address,
+      userAccount,
       Math.pow(10, 18) * kdtAmount,
       {
         from: process.env.FEE_PAYER_ADDRESS,
