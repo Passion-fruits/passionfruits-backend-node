@@ -7,9 +7,6 @@ export class SuccessPaymentDto {
   @IsString()
   order_id: string;
 
-  @IsString()
-  to_address: string;
-
   @IsNumber()
   amount: number;
 }
