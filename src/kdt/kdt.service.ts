@@ -2,14 +2,16 @@ import { Inject, Injectable } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
-import { KIP7 } from 'src/config/caver';
+import { caver, KIP7 } from 'src/config/caver';
 import {
   AlreadyPaymentedException,
   NotFoundKdtHistoryException,
 } from 'src/shared/exception/exception.index';
 import { IUserReqeust } from 'src/shared/interface/request.interface';
+import { DonateKdtRequest } from './dto/donate-kdt.dto';
 import { GetKdtDetailResponseData } from './dto/get-kdt-detail.dto';
 import { GetKdtHistoryResponseData } from './dto/get-kdt-history.dto';
+import { GetRandomWalletResponseData } from './dto/get-random-wallet.dto';
 import { SuccessPaymentDto } from './dto/success-payment.dto';
 import { KdtHistory } from './entity/kdt-history.entity';
 import { KdtHistoryRepository } from './entity/kdt-history.repository';
@@ -49,7 +51,7 @@ export class KdtService {
 
     const txRes = await KIP7.transfer(
       dto.to_address,
-      1000000000000000000 * kdtAmount,
+      Math.pow(10, 18) * kdtAmount,
       {
         from: process.env.FEE_PAYER_ADDRESS,
         feeDelegation: true,
@@ -85,5 +87,15 @@ export class KdtService {
     );
     if (historyRecords.length === 0) throw NotFoundKdtHistoryException;
     return { history: historyRecords };
+  }
+
+  public async donateKdt(dto: DonateKdtRequest): Promise<void> {}
+
+  public async getRandomWallet(): Promise<GetRandomWalletResponseData> {
+    const keyring = caver.wallet.getKeyring(caver.wallet.generate(1)[0]);
+    return {
+      address: keyring._address,
+      private_key: keyring._key['_privateKey'],
+    };
   }
 }

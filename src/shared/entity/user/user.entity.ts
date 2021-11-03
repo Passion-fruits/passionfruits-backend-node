@@ -24,6 +24,9 @@ export class User {
   @Column({ length: 100 })
   email: string;
 
+  @Column({ length: 100 })
+  private_key: string;
+
   @OneToOne(() => Profile, (profile) => profile.user_id)
   profile: Profile;
 

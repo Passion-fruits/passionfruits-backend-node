@@ -1,5 +1,5 @@
-const Caver = require('caver-js');
-const caver = new Caver(process.env.BAOBAB_TESTNET_HOST);
+import * as Caver from 'caver-js';
+export const caver = new Caver(process.env.BAOBAB_TESTNET_HOST);
 
 const keyring = new caver.wallet.keyring.singleKeyring(
   process.env.FEE_PAYER_ADDRESS,
