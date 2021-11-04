@@ -12,9 +12,10 @@ import { UserCommentSong } from '../../../comment/entity/user-comment-song.entit
 import { Follow } from '../follow/follow.entity';
 import { Playlist } from 'src/playlist/entity/playlist.entity';
 import { UserLikePlaylist } from 'src/playlist/entity/user-like-playlist.entity';
-import { Kdt } from '../../../kdt/entity/kdt.entity';
-import { KdtHistory } from 'src/kdt/entity/kdt-history.entity';
+import { Kdt } from '../../../kdt/entity/kdt/kdt.entity';
+import { KdtHistory } from 'src/kdt/entity/kdt-history/kdt-history.entity';
 import { History } from 'src/history/entity/history.entity';
+import { Message } from 'src/kdt/entity/message/message.entity';
 
 @Entity('user')
 export class User {
@@ -32,6 +33,9 @@ export class User {
 
   @OneToOne(() => Kdt, (kdt) => kdt.user_id)
   kdt: Kdt;
+
+  @OneToMany(() => Message, (message) => message.user_id)
+  message: Message[];
 
   @OneToMany(() => Song, (song) => song.user)
   song: Song[];
