@@ -76,4 +76,26 @@ export class KdtHistoryRepository extends Repository<KdtHistory> {
       .where('hs.user_id = :user_id', { user_id })
       .getRawMany();
   }
+
+  public getAnswerHistory(user_id: number): Promise<DonateHistoryVo[]> {
+    return this.createQueryBuilder('hs')
+      .innerJoin('hs.user', 'user')
+      .innerJoin('user.profile', 'profile')
+      .innerJoin('hs.message_id', 'message')
+      .innerJoin('message.artist_id', 'artist')
+      .innerJoin('artist.profile', 'artist_profile')
+      .select('user.id', 'user_id')
+      .addSelect('profile.image_path', 'profile')
+      .addSelect('profile.name', 'name')
+      .addSelect('artist_profile.name', 'artist')
+      .addSelect('artist.id', 'artist_id')
+      .addSelect('message.id', 'message_id')
+      .addSelect('message.question', 'question')
+      .addSelect('message.answer', 'answer')
+      .addSelect('hs.amount', 'amount')
+      .addSelect('hs.tx_hash', 'tx_hash')
+      .addSelect('artist_profile.image_path', 'artist_profile')
+      .where('message.artist_id = :user_id', { user_id })
+      .getRawMany();
+  }
 }
