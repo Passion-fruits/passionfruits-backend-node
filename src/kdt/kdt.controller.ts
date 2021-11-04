@@ -48,6 +48,12 @@ export class KdtController {
   }
 
   @UseGuards(AuthGuard('jwt'))
+  @Get('history/answer')
+  public getAnswerHistory(): Promise<GetDonateHistoryResponseData> {
+    return this.kdtService.getAnswerHistory();
+  }
+
+  @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.CREATED)
   @Post('donate')
   public async donateKdt(@Body() dto: DonateKdtRequest): Promise<void> {
