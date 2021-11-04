@@ -7,12 +7,14 @@ export class MessageRepository extends Repository<Message> {
     id: number,
     question: string,
     user_id: number,
+    artist_id: number,
   ): Promise<void> {
     let newMessage: Message;
     newMessage = this.create({
       id,
       question,
       user_id,
+      artist_id,
     });
     await this.save(newMessage);
   }
