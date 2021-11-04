@@ -35,7 +35,10 @@ export class User {
   kdt: Kdt;
 
   @OneToMany(() => Message, (message) => message.user_id)
-  message: Message[];
+  user_message: Message[];
+
+  @OneToMany(() => Message, (message) => message.artist_id)
+  artist_message: Message[];
 
   @OneToMany(() => Song, (song) => song.user)
   song: Song[];

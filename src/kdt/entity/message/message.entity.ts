@@ -20,9 +20,13 @@ export class Message {
   @Column({ type: 'text', nullable: true })
   answer: string;
 
-  @ManyToOne(() => User, (user) => user.message)
+  @ManyToOne(() => User, (user) => user.user_message)
   @JoinColumn({ name: 'user_id' })
   user_id: number;
+
+  @ManyToOne(() => User, (user) => user.artist_message)
+  @JoinColumn({ name: 'artist_id' })
+  artist_id: number;
 
   @OneToOne(() => KdtHistory, (kdtHistory) => kdtHistory.message_id)
   kdt_history: KdtHistory;
