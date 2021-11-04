@@ -113,6 +113,14 @@ export class KdtService {
     return { history: historyRecords };
   }
 
+  public async getAnswerHistory(): Promise<GetDonateHistoryResponseData> {
+    const historyRecords = await this.kdtHistoryRepository.getAnswerHistory(
+      this.request.user.sub,
+    );
+    if (historyRecords.length === 0) throw NotFoundKdtHistoryException;
+    return { history: historyRecords };
+  }
+
   public async donateKdt(dto: DonateKdtRequest): Promise<void> {
     const { wallet } = await this.profileRepository.findAccountById(
       this.request.user.sub,
