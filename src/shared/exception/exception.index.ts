@@ -15,6 +15,12 @@ export const PlaylistHasSongExistException = new BadRequestException(
 export const AlreadyPaymentedException = new BadRequestException(
   'Already Paymented',
 );
+export const InsufficientBalanceException = new BadRequestException(
+  'Insufficient Balance Exception',
+);
+export const SameNonceTxPoolException = new BadRequestException(
+  'Same Nonce Tx Pool Exception',
+);
 
 // 401
 export const UnauthorizedTokenException = new UnauthorizedException(
