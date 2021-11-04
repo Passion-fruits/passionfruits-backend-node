@@ -15,6 +15,7 @@ import {
   SameNonceTxPoolException,
 } from 'src/shared/exception/exception.index';
 import { IUserReqeust } from 'src/shared/interface/request.interface';
+import { GetDonateHistoryResponseData } from './dto/donate-history.dto';
 import { DonateKdtRequest } from './dto/donate-kdt.dto';
 import { GetKdtDetailResponseData } from './dto/get-kdt-detail.dto';
 import { GetKdtHistoryResponseData } from './dto/get-kdt-history.dto';
@@ -104,6 +105,14 @@ export class KdtService {
     return { history: historyRecords };
   }
 
+  public async getDonateHistory(): Promise<GetDonateHistoryResponseData> {
+    const historyRecords = await this.kdtHistoryRepository.getDonateHistory(
+      this.request.user.sub,
+    );
+    if (historyRecords.length === 0) throw NotFoundKdtHistoryException;
+    return { history: historyRecords };
+  }
+
   public async donateKdt(dto: DonateKdtRequest): Promise<void> {
     const { wallet } = await this.profileRepository.findAccountById(
       this.request.user.sub,
@@ -139,6 +148,7 @@ export class KdtService {
       messageIdx,
       dto.question,
       this.request.user.sub,
+      dto.artist_id,
     );
 
     await this.kdtHistoryRepository.donateKdt(
