@@ -48,7 +48,7 @@ export class KdtController {
   }
 
   @Get('wallet/random')
-  public getRandomWallet(): Promise<GetRandomWalletResponseData> {
-    return this.kdtService.getRandomWallet();
+  public async getRandomWallet(): Promise<GetRandomWalletResponseData> {
+    return await this.kdtService.getRandomWallet();
   }
 }
