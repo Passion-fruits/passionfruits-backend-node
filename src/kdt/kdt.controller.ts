@@ -9,6 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { GetDonateHistoryResponseData } from './dto/donate-history.dto';
 import { DonateKdtRequest } from './dto/donate-kdt.dto';
 import { GetKdtDetailResponseData } from './dto/get-kdt-detail.dto';
 import { GetKdtHistoryResponseData } from './dto/get-kdt-history.dto';
@@ -35,9 +36,15 @@ export class KdtController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('history')
+  @Get('history/charge')
   public getKdtHistory(): Promise<GetKdtHistoryResponseData> {
     return this.kdtService.getKdtHistory();
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('history/donate')
+  public getDonateHistory(): Promise<GetDonateHistoryResponseData> {
+    return this.kdtService.getDonateHistory();
   }
 
   @UseGuards(AuthGuard('jwt'))
