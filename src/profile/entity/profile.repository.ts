@@ -46,4 +46,11 @@ export class ProfileRepository extends Repository<Profile> {
       name: dto.name,
     });
   }
+
+  public findAccountById(user_id: number): Promise<{ wallet: string }> {
+    return this.findOne({
+      select: ['wallet'],
+      where: { user_id },
+    });
+  }
 }
