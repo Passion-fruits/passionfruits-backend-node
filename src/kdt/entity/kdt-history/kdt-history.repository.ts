@@ -1,8 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
-import {
-  GetKdtHistoryResponseData,
-  KdtHistoryVo,
-} from '../dto/get-kdt-history.dto';
+import { v4 } from 'uuid';
+import { KdtHistoryVo } from '../../dto/get-kdt-history.dto';
 import { KdtHistory } from './kdt-history.entity';
 
 @EntityRepository(KdtHistory)
@@ -22,6 +20,25 @@ export class KdtHistoryRepository extends Repository<KdtHistory> {
       user,
       tx_hash,
       kdt_type: 1,
+    });
+    await this.save(newKdtHistory);
+  }
+
+  public async donateKdt(
+    message_id: number,
+    amount: number,
+    user: number,
+    tx_hash: string,
+  ): Promise<void> {
+    console.log(user);
+    let newKdtHistory: KdtHistory;
+    newKdtHistory = this.create({
+      order_id: v4(),
+      amount,
+      tx_hash,
+      kdt_type: 2,
+      user,
+      message_id,
     });
     await this.save(newKdtHistory);
   }
