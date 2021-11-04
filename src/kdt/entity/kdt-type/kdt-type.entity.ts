@@ -1,11 +1,5 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { KdtHistory } from './kdt-history.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { KdtHistory } from '../kdt-history/kdt-history.entity';
 
 @Entity('kdt_type')
 export class KdtType {

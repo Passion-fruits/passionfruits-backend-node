@@ -1,5 +1,5 @@
 import { now } from 'moment';
-import { Kdt } from 'src/kdt/entity/kdt.entity';
+import { Kdt } from 'src/kdt/entity/kdt/kdt.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { History } from './history.entity';
 

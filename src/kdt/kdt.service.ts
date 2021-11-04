@@ -2,12 +2,17 @@ import { Inject, Injectable } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
-import { caver, KIP7 } from 'src/config/caver';
+import { randomInt } from 'crypto';
+import { caver, kdtContract, KIP7 } from 'src/config/caver';
 import { Profile } from 'src/profile/entity/profile.entity';
 import { ProfileRepository } from 'src/profile/entity/profile.repository';
+import { User } from 'src/shared/entity/user/user.entity';
+import { UserRepository } from 'src/shared/entity/user/user.repository';
 import {
   AlreadyPaymentedException,
+  InsufficientBalanceException,
   NotFoundKdtHistoryException,
+  SameNonceTxPoolException,
 } from 'src/shared/exception/exception.index';
 import { IUserReqeust } from 'src/shared/interface/request.interface';
 import { DonateKdtRequest } from './dto/donate-kdt.dto';
@@ -15,10 +20,12 @@ import { GetKdtDetailResponseData } from './dto/get-kdt-detail.dto';
 import { GetKdtHistoryResponseData } from './dto/get-kdt-history.dto';
 import { GetRandomWalletResponseData } from './dto/get-random-wallet.dto';
 import { SuccessPaymentDto } from './dto/success-payment.dto';
-import { KdtHistory } from './entity/kdt-history.entity';
-import { KdtHistoryRepository } from './entity/kdt-history.repository';
-import { Kdt } from './entity/kdt.entity';
-import { KdtRepository } from './entity/kdt.repository';
+import { KdtHistory } from './entity/kdt-history/kdt-history.entity';
+import { KdtHistoryRepository } from './entity/kdt-history/kdt-history.repository';
+import { Kdt } from './entity/kdt/kdt.entity';
+import { KdtRepository } from './entity/kdt/kdt.repository';
+import { Message } from './entity/message/message.entity';
+import { MessageRepository } from './entity/message/message.repository';
 
 @Injectable()
 export class KdtService {
@@ -28,7 +35,12 @@ export class KdtService {
     private readonly kdtHistoryRepository: KdtHistoryRepository,
     @InjectRepository(Profile)
     private readonly profileRepository: ProfileRepository,
-    @Inject(REQUEST) private readonly request: IUserReqeust,
+    @InjectRepository(User)
+    private readonly userRepository: UserRepository,
+    @InjectRepository(Message)
+    private readonly messageRepository: MessageRepository,
+    @Inject(REQUEST)
+    private readonly request: IUserReqeust,
   ) {}
 
   public async successPayment(dto: SuccessPaymentDto): Promise<void> {
@@ -51,21 +63,16 @@ export class KdtService {
       throw AlreadyPaymentedException;
     }
 
-    const userAccount = await this.profileRepository.findOne({
-      select: ['wallet'],
-      where: { user_id: this.request.user.sub },
-    });
+    const { wallet } = await this.profileRepository.findAccountById(
+      this.request.user.sub,
+    );
     const kdtAmount = (dto.amount * 10) / 12 / 100;
 
-    const txRes = await KIP7.transfer(
-      userAccount,
-      Math.pow(10, 18) * kdtAmount,
-      {
-        from: process.env.FEE_PAYER_ADDRESS,
-        feeDelegation: true,
-        feePayer: process.env.FEE_PAYER_ADDRESS,
-      },
-    );
+    const txRes = await KIP7.transfer(wallet, Math.pow(10, 18) * kdtAmount, {
+      from: process.env.FEE_PAYER_ADDRESS,
+      feeDelegation: true,
+      feePayer: process.env.FEE_PAYER_ADDRESS,
+    });
 
     await this.kdtRepository.successPayment(kdtAmount, this.request.user.sub);
 
@@ -97,7 +104,50 @@ export class KdtService {
     return { history: historyRecords };
   }
 
-  public async donateKdt(dto: DonateKdtRequest): Promise<void> {}
+  public async donateKdt(dto: DonateKdtRequest): Promise<void> {
+    const { wallet } = await this.profileRepository.findAccountById(
+      this.request.user.sub,
+    );
+    const { private_key } = await this.userRepository.findPrivateKeyById(
+      this.request.user.sub,
+    );
+    const balance = await KIP7.balanceOf(wallet);
+
+    if (balance < dto.amount * Math.pow(10, 18))
+      throw InsufficientBalanceException;
+
+    const keyring = new caver.wallet.keyring.singleKeyring(wallet, private_key);
+    caver.wallet.updateKeyring(keyring);
+
+    const txRes = await kdtContract.methods
+      .registerSponser(dto.address, dto.question, dto.amount)
+      .send({
+        from: wallet,
+        gas: 3000000,
+        feeDelegation: true,
+        feePayer: process.env.FEE_PAYER_ADDRESS,
+      })
+      .catch((err) => {
+        console.error(err);
+        throw SameNonceTxPoolException;
+      });
+
+    const messageIdx = await kdtContract.call('msgIdx');
+
+    //todo 트랜잭션 묶기
+    await this.messageRepository.donateKdt(
+      messageIdx,
+      dto.question,
+      this.request.user.sub,
+    );
+
+    await this.kdtHistoryRepository.donateKdt(
+      messageIdx,
+      dto.amount,
+      this.request.user.sub,
+      txRes.events.Transfer.transactionHash,
+    );
+  }
 
   public async getRandomWallet(): Promise<GetRandomWalletResponseData> {
     const keyring = caver.wallet.getKeyring(caver.wallet.generate(1)[0]);
