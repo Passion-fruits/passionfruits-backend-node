@@ -20,6 +20,9 @@ export class Message {
   @Column({ type: 'text', nullable: true })
   answer: string;
 
+  @Column({ length: 150, nullable: true })
+  tx_hash: string;
+
   @ManyToOne(() => User, (user) => user.user_message)
   @JoinColumn({ name: 'user_id' })
   user_id: number;

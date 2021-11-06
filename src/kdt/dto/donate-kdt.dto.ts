@@ -9,7 +9,4 @@ export class DonateKdtRequest {
 
   @IsString()
   question: string;
-
-  @IsString()
-  address: string;
 }

@@ -31,7 +31,6 @@ export class KdtHistoryRepository extends Repository<KdtHistory> {
     user: number,
     tx_hash: string,
   ): Promise<void> {
-    console.log(user);
     let newKdtHistory: KdtHistory;
     newKdtHistory = this.create({
       order_id: v4(),

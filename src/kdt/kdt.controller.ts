@@ -9,6 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { AnswerDonateDto } from './dto/answer-donate.dto';
 import { GetDonateHistoryResponseData } from './dto/donate-history.dto';
 import { DonateKdtRequest } from './dto/donate-kdt.dto';
 import { GetKdtDetailResponseData } from './dto/get-kdt-detail.dto';
@@ -58,6 +59,13 @@ export class KdtController {
   @Post('donate')
   public async donateKdt(@Body() dto: DonateKdtRequest): Promise<void> {
     await this.kdtService.donateKdt(dto);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @HttpCode(HttpStatus.CREATED)
+  @Post('answer')
+  public async answerDonate(@Body() dto: AnswerDonateDto): Promise<void> {
+    await this.kdtService.answerDonate(dto);
   }
 
   @Get('wallet/random')
