@@ -18,4 +18,12 @@ export class MessageRepository extends Repository<Message> {
     });
     await this.save(newMessage);
   }
+
+  public async answerDonate(
+    id: number,
+    answer: string,
+    tx_hash: string,
+  ): Promise<void> {
+    await this.update(id, { answer, tx_hash });
+  }
 }
