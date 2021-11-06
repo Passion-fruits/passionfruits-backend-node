@@ -15,6 +15,7 @@ import {
   SameNonceTxPoolException,
 } from 'src/shared/exception/exception.index';
 import { IUserReqeust } from 'src/shared/interface/request.interface';
+import { AnswerDonateDto } from './dto/answer-donate.dto';
 import { GetDonateHistoryResponseData } from './dto/donate-history.dto';
 import { DonateKdtRequest } from './dto/donate-kdt.dto';
 import { GetKdtDetailResponseData } from './dto/get-kdt-detail.dto';
@@ -122,24 +123,31 @@ export class KdtService {
   }
 
   public async donateKdt(dto: DonateKdtRequest): Promise<void> {
-    const { wallet } = await this.profileRepository.findAccountById(
+    const { wallet: userWallet } = await this.profileRepository.findAccountById(
       this.request.user.sub,
     );
+    const { wallet: artistWallet } =
+      await this.profileRepository.findAccountById(dto.artist_id);
     const { private_key } = await this.userRepository.findPrivateKeyById(
       this.request.user.sub,
     );
-    const balance = await KIP7.balanceOf(wallet);
+    const balance = await KIP7.balanceOf(userWallet);
 
     if (balance < dto.amount * Math.pow(10, 18))
       throw InsufficientBalanceException;
 
-    const keyring = new caver.wallet.keyring.singleKeyring(wallet, private_key);
-    caver.wallet.updateKeyring(keyring);
+    if (!caver.wallet.getKeyring(userWallet)) {
+      caver.wallet.add(
+        new caver.wallet.keyring.singleKeyring(userWallet, private_key),
+      );
+    }
+
+    const messageIdx = await kdtContract.call('msgIdx');
 
     const txRes = await kdtContract.methods
-      .registerSponser(dto.address, dto.question, dto.amount)
+      .registerSponser(artistWallet, dto.question, dto.amount)
       .send({
-        from: wallet,
+        from: userWallet,
         gas: 3000000,
         feeDelegation: true,
         feePayer: process.env.FEE_PAYER_ADDRESS,
@@ -148,8 +156,6 @@ export class KdtService {
         console.error(err);
         throw SameNonceTxPoolException;
       });
-
-    const messageIdx = await kdtContract.call('msgIdx');
 
     //todo 트랜잭션 묶기
     await this.messageRepository.donateKdt(
@@ -163,6 +169,41 @@ export class KdtService {
       messageIdx,
       dto.amount,
       this.request.user.sub,
+      txRes.events.Transfer.transactionHash,
+    );
+  }
+
+  public async answerDonate(dto: AnswerDonateDto): Promise<void> {
+    const { wallet: artistWallet } =
+      await this.profileRepository.findAccountById(this.request.user.sub);
+    const { wallet: donateUserWallet } =
+      await this.profileRepository.findAccountById(dto.donate_user_id);
+    const { private_key } = await this.userRepository.findPrivateKeyById(
+      this.request.user.sub,
+    );
+
+    if (!caver.wallet.getKeyring(artistWallet)) {
+      caver.wallet.add(
+        new caver.wallet.keyring.singleKeyring(artistWallet, private_key),
+      );
+    }
+
+    const txRes = await kdtContract.methods
+      .answerArtist(donateUserWallet, dto.answer, dto.message_id)
+      .send({
+        from: artistWallet,
+        gas: 3000000,
+        feeDelegation: true,
+        feePayer: process.env.FEE_PAYER_ADDRESS,
+      })
+      .catch((err) => {
+        console.error(err);
+        throw SameNonceTxPoolException;
+      });
+
+    await this.messageRepository.answerDonate(
+      dto.message_id,
+      dto.answer,
       txRes.events.Transfer.transactionHash,
     );
   }
