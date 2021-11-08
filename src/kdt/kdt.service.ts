@@ -91,10 +91,18 @@ export class KdtService {
     const { user_id, ...res } = await this.kdtRepository.findOne(
       this.request.user.sub,
     );
+    const { wallet } = await this.profileRepository.findAccountById(user_id);
+
+    const add_kdt = parseInt(res.add_kdt.toString());
+    const donate_kdt = parseInt(res.donate_kdt.toString());
+    const reward_kdt = parseInt(res.reward_kdt.toString());
+    const total_kdt = parseInt(await KIP7.balanceOf(wallet));
 
     return {
-      add_kdt: parseInt(res.add_kdt.toString()),
-      donate_kdt: parseInt(res.donate_kdt.toString()),
+      add_kdt,
+      donate_kdt,
+      reward_kdt,
+      total_kdt,
     };
   }
 
