@@ -13,4 +13,7 @@ export class Kdt {
 
   @Column({ type: 'bigint', default: 0 })
   donate_kdt: number;
+
+  @Column({ type: 'bigint', default: 0 })
+  reward_kdt: number;
 }
