@@ -17,14 +17,17 @@ export class SnsRepository extends Repository<Sns> {
   }
 
   public async modifySns(
-    sns: Sns,
+    profile_user_id: number,
     dto: ModifyProfileDto,
   ): Promise<UpdateResult> {
-    return await this.update(sns, {
-      insta: dto.insta,
-      facebook: dto.facebook,
-      soundcloud: dto.soundcloud,
-      youtube: dto.youtube,
-    });
+    return await this.update(
+      { profile_user_id },
+      {
+        insta: dto.insta,
+        facebook: dto.facebook,
+        soundcloud: dto.soundcloud,
+        youtube: dto.youtube,
+      },
+    );
   }
 }

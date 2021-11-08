@@ -38,13 +38,16 @@ export class ProfileRepository extends Repository<Profile> {
   }
 
   public async modifyProfile(
-    profile: Profile,
+    user_id: number,
     dto: ModifyProfileDto,
-  ): Promise<UpdateResult> {
-    return await this.update(profile, {
-      bio: dto.bio,
-      name: dto.name,
-    });
+  ): Promise<void> {
+    await this.update(
+      { user_id },
+      {
+        bio: dto.bio,
+        name: dto.name,
+      },
+    );
   }
 
   public findAccountById(user_id: number): Promise<{ wallet: string }> {

@@ -51,9 +51,9 @@ export class ProfileService {
 
     if (!snsRecord)
       await this.snsRepository.createSns(profileRecord.user_id, dto);
-    else await this.snsRepository.modifySns(snsRecord, dto);
+    else await this.snsRepository.modifySns(this.request.user.sub, dto);
 
-    await this.profileRepository.modifyProfile(profileRecord, dto);
+    await this.profileRepository.modifyProfile(this.request.user.sub, dto);
     return { ...dto };
   }
 
