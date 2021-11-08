@@ -62,7 +62,10 @@ export class ProfileService {
       this.request.user.sub,
     );
     if (!profileRecord) throw NotFoundProfileException;
-    await this.profileRepository.update(profileRecord, { image_path });
+    await this.profileRepository.update(
+      { user_id: this.request.user.sub },
+      { image_path },
+    );
   }
 
   public async postWallet(wallet: string): Promise<void> {
