@@ -55,7 +55,11 @@ export class KdtHistoryRepository extends Repository<KdtHistory> {
       .getRawMany();
   }
 
-  public getDonateHistory(user_id: number): Promise<DonateHistoryVo[]> {
+  public getDonateHistory(
+    user_id: number,
+    done: number,
+  ): Promise<DonateHistoryVo[]> {
+    const flagQuery = done === 0 ? 'IS NULL' : 'IS NOT NULL';
     return this.createQueryBuilder('hs')
       .innerJoin('hs.user', 'user')
       .innerJoin('user.profile', 'profile')
@@ -74,11 +78,16 @@ export class KdtHistoryRepository extends Repository<KdtHistory> {
       .addSelect('hs.tx_hash', 'tx_hash')
       .addSelect('artist_profile.image_path', 'artist_profile')
       .where('hs.user_id = :user_id', { user_id })
+      .andWhere(`message.answer ${flagQuery}`)
       .orderBy('hs.created_at', 'DESC')
       .getRawMany();
   }
 
-  public getAnswerHistory(user_id: number): Promise<DonateHistoryVo[]> {
+  public getAnswerHistory(
+    user_id: number,
+    done: number,
+  ): Promise<DonateHistoryVo[]> {
+    const flagQuery = done === 0 ? 'IS NULL' : 'IS NOT NULL';
     return this.createQueryBuilder('hs')
       .innerJoin('hs.user', 'user')
       .innerJoin('user.profile', 'profile')
@@ -97,6 +106,7 @@ export class KdtHistoryRepository extends Repository<KdtHistory> {
       .addSelect('hs.tx_hash', 'tx_hash')
       .addSelect('artist_profile.image_path', 'artist_profile')
       .where('message.artist_id = :user_id', { user_id })
+      .andWhere(`message.answer ${flagQuery}`)
       .orderBy('hs.created_at', 'DESC')
       .getRawMany();
   }
