@@ -51,6 +51,7 @@ export class KdtHistoryRepository extends Repository<KdtHistory> {
       .addSelect('hs.tx_hash', 'tx_hash')
       .addSelect('hs.kdt_type', 'kdt_type')
       .where('hs.user_id = :user_id', { user_id })
+      .orderBy('hs.created_at', 'DESC')
       .getRawMany();
   }
 
@@ -73,6 +74,7 @@ export class KdtHistoryRepository extends Repository<KdtHistory> {
       .addSelect('hs.tx_hash', 'tx_hash')
       .addSelect('artist_profile.image_path', 'artist_profile')
       .where('hs.user_id = :user_id', { user_id })
+      .orderBy('hs.created_at', 'DESC')
       .getRawMany();
   }
 
@@ -95,6 +97,7 @@ export class KdtHistoryRepository extends Repository<KdtHistory> {
       .addSelect('hs.tx_hash', 'tx_hash')
       .addSelect('artist_profile.image_path', 'artist_profile')
       .where('message.artist_id = :user_id', { user_id })
+      .orderBy('hs.created_at', 'DESC')
       .getRawMany();
   }
 }
