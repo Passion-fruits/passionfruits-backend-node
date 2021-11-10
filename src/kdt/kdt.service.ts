@@ -12,6 +12,7 @@ import {
   AlreadyPaymentedException,
   InsufficientBalanceException,
   NotFoundKdtHistoryException,
+  QueryBadRequest,
   SameNonceTxPoolException,
 } from 'src/shared/exception/exception.index';
 import { IUserReqeust } from 'src/shared/interface/request.interface';
@@ -114,17 +115,27 @@ export class KdtService {
     return { history: historyRecords };
   }
 
-  public async getDonateHistory(): Promise<GetDonateHistoryResponseData> {
+  public async getDonateHistory(
+    done: number,
+  ): Promise<GetDonateHistoryResponseData> {
+    if (!(done === 1 || done === 0)) throw QueryBadRequest;
+
     const historyRecords = await this.kdtHistoryRepository.getDonateHistory(
       this.request.user.sub,
+      done,
     );
     if (historyRecords.length === 0) throw NotFoundKdtHistoryException;
     return { history: historyRecords };
   }
 
-  public async getAnswerHistory(): Promise<GetDonateHistoryResponseData> {
+  public async getAnswerHistory(
+    done: number,
+  ): Promise<GetDonateHistoryResponseData> {
+    if (!(done === 1 || done === 0)) throw QueryBadRequest;
+
     const historyRecords = await this.kdtHistoryRepository.getAnswerHistory(
       this.request.user.sub,
+      done,
     );
     if (historyRecords.length === 0) throw NotFoundKdtHistoryException;
     return { history: historyRecords };
