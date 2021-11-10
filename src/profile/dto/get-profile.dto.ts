@@ -11,4 +11,6 @@ export class GetProfileResponseData {
   follower: number;
   following: number;
   wallet: string;
+  song_count: number;
+  playlist_count: number;
 }

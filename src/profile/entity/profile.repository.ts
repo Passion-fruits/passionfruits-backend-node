@@ -21,6 +21,18 @@ export class ProfileRepository extends Repository<Profile> {
       .addSelect((subQuery) => {
         return subQuery
           .select('COUNT(*)')
+          .from('song', 'song')
+          .where('song.user_id = :user_id', { user_id });
+      }, 'song_count')
+      .addSelect((subQuery) => {
+        return subQuery
+          .select('COUNT(*)')
+          .from('playlist', 'playlist')
+          .where('playlist.user_id = :user_id', { user_id });
+      }, 'playlist_count')
+      .addSelect((subQuery) => {
+        return subQuery
+          .select('COUNT(*)')
           .from('user', 'user')
           .innerJoin('user.follower', 'follower')
           .where('user.id = :user_id', { user_id });
