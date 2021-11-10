@@ -44,14 +44,18 @@ export class KdtController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get('history/donate')
-  public getDonateHistory(): Promise<GetDonateHistoryResponseData> {
-    return this.kdtService.getDonateHistory();
+  public getDonateHistory(
+    @Query('done') done: number,
+  ): Promise<GetDonateHistoryResponseData> {
+    return this.kdtService.getDonateHistory(done);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Get('history/answer')
-  public getAnswerHistory(): Promise<GetDonateHistoryResponseData> {
-    return this.kdtService.getAnswerHistory();
+  public getAnswerHistory(
+    @Query('done') done: number,
+  ): Promise<GetDonateHistoryResponseData> {
+    return this.kdtService.getAnswerHistory(done);
   }
 
   @UseGuards(AuthGuard('jwt'))
