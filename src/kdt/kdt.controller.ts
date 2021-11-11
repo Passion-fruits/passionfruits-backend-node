@@ -38,24 +38,31 @@ export class KdtController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get('history/charge')
-  public getKdtHistory(): Promise<GetKdtHistoryResponseData> {
-    return this.kdtService.getKdtHistory();
+  public getKdtHistory(
+    @Query('page') page: number,
+    @Query('size') size: number,
+  ): Promise<GetKdtHistoryResponseData> {
+    return this.kdtService.getKdtHistory(page, size);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Get('history/donate')
   public getDonateHistory(
     @Query('done') done: number,
+    @Query('page') page: number,
+    @Query('size') size: number,
   ): Promise<GetDonateHistoryResponseData> {
-    return this.kdtService.getDonateHistory(done);
+    return this.kdtService.getDonateHistory(done, page, size);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Get('history/answer')
   public getAnswerHistory(
     @Query('done') done: number,
+    @Query('page') page: number,
+    @Query('size') size: number,
   ): Promise<GetDonateHistoryResponseData> {
-    return this.kdtService.getAnswerHistory(done);
+    return this.kdtService.getAnswerHistory(done, page, size);
   }
 
   @UseGuards(AuthGuard('jwt'))
