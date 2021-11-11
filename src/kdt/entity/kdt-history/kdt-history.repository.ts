@@ -43,7 +43,11 @@ export class KdtHistoryRepository extends Repository<KdtHistory> {
     await this.save(newKdtHistory);
   }
 
-  public async getKdtHistory(user_id: number): Promise<KdtHistoryVo[]> {
+  public async getKdtHistory(
+    user_id: number,
+    page: number,
+    size: number,
+  ): Promise<KdtHistoryVo[]> {
     return this.createQueryBuilder('hs')
       .select('hs.order_id', 'order_id')
       .addSelect('hs.created_at', 'created_at')
@@ -51,6 +55,8 @@ export class KdtHistoryRepository extends Repository<KdtHistory> {
       .addSelect('hs.tx_hash', 'tx_hash')
       .addSelect('hs.kdt_type', 'kdt_type')
       .where('hs.user_id = :user_id', { user_id })
+      .limit(size)
+      .offset((page - 1) * size)
       .orderBy('hs.created_at', 'DESC')
       .getRawMany();
   }
@@ -58,6 +64,8 @@ export class KdtHistoryRepository extends Repository<KdtHistory> {
   public getDonateHistory(
     user_id: number,
     done: number,
+    page: number,
+    size: number,
   ): Promise<DonateHistoryVo[]> {
     const flagQuery = done === 0 ? 'IS NULL' : 'IS NOT NULL';
     return this.createQueryBuilder('hs')
@@ -79,6 +87,8 @@ export class KdtHistoryRepository extends Repository<KdtHistory> {
       .addSelect('artist_profile.image_path', 'artist_profile')
       .where('hs.user_id = :user_id', { user_id })
       .andWhere(`message.answer ${flagQuery}`)
+      .limit(size)
+      .offset((page - 1) * size)
       .orderBy('hs.created_at', 'DESC')
       .getRawMany();
   }
@@ -86,6 +96,8 @@ export class KdtHistoryRepository extends Repository<KdtHistory> {
   public getAnswerHistory(
     user_id: number,
     done: number,
+    page: number,
+    size: number,
   ): Promise<DonateHistoryVo[]> {
     const flagQuery = done === 0 ? 'IS NULL' : 'IS NOT NULL';
     return this.createQueryBuilder('hs')
@@ -107,6 +119,8 @@ export class KdtHistoryRepository extends Repository<KdtHistory> {
       .addSelect('artist_profile.image_path', 'artist_profile')
       .where('message.artist_id = :user_id', { user_id })
       .andWhere(`message.answer ${flagQuery}`)
+      .limit(size)
+      .offset((page - 1) * size)
       .orderBy('hs.created_at', 'DESC')
       .getRawMany();
   }

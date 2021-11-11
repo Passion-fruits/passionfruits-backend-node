@@ -107,9 +107,17 @@ export class KdtService {
     };
   }
 
-  public async getKdtHistory(): Promise<GetKdtHistoryResponseData> {
+  public async getKdtHistory(
+    page: number,
+    size: number,
+  ): Promise<GetKdtHistoryResponseData> {
+    if (isNaN(page) || isNaN(size)) throw QueryBadRequest;
+    if (page <= 0 || size <= 0) throw QueryBadRequest;
+
     const historyRecords = await this.kdtHistoryRepository.getKdtHistory(
       this.request.user.sub,
+      page,
+      size,
     );
     if (historyRecords.length === 0) throw NotFoundKdtHistoryException;
     return { history: historyRecords };
@@ -117,12 +125,18 @@ export class KdtService {
 
   public async getDonateHistory(
     done: number,
+    page: number,
+    size: number,
   ): Promise<GetDonateHistoryResponseData> {
     if (!(done === 1 || done === 0)) throw QueryBadRequest;
+    if (isNaN(page) || isNaN(size)) throw QueryBadRequest;
+    if (page <= 0 || size <= 0) throw QueryBadRequest;
 
     const historyRecords = await this.kdtHistoryRepository.getDonateHistory(
       this.request.user.sub,
       done,
+      page,
+      size,
     );
     if (historyRecords.length === 0) throw NotFoundKdtHistoryException;
     return { history: historyRecords };
@@ -130,12 +144,18 @@ export class KdtService {
 
   public async getAnswerHistory(
     done: number,
+    page: number,
+    size: number,
   ): Promise<GetDonateHistoryResponseData> {
     if (!(done === 1 || done === 0)) throw QueryBadRequest;
+    if (isNaN(page) || isNaN(size)) throw QueryBadRequest;
+    if (page <= 0 || size <= 0) throw QueryBadRequest;
 
     const historyRecords = await this.kdtHistoryRepository.getAnswerHistory(
       this.request.user.sub,
       done,
+      page,
+      size,
     );
     if (historyRecords.length === 0) throw NotFoundKdtHistoryException;
     return { history: historyRecords };
