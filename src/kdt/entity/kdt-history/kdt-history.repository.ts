@@ -43,6 +43,24 @@ export class KdtHistoryRepository extends Repository<KdtHistory> {
     await this.save(newKdtHistory);
   }
 
+  public async answerKdt(
+    message_id: number,
+    amount: number,
+    user: number,
+    tx_hash: string,
+  ): Promise<void> {
+    let newKdtHistory: KdtHistory;
+    newKdtHistory = this.create({
+      order_id: v4(),
+      amount,
+      tx_hash,
+      kdt_type: 3,
+      user,
+      message_id,
+    });
+    await this.save(newKdtHistory);
+  }
+
   public async getKdtHistory(
     user_id: number,
     page: number,
@@ -59,6 +77,15 @@ export class KdtHistoryRepository extends Repository<KdtHistory> {
       .offset((page - 1) * size)
       .orderBy('hs.created_at', 'DESC')
       .getRawMany();
+  }
+
+  public findAmountByMessageId(
+    message_id: number,
+  ): Promise<{ amount: number }> {
+    return this.createQueryBuilder('hs')
+      .select('hs.amount', 'amount')
+      .where('message_id = :message_id', { message_id })
+      .getRawOne();
   }
 
   public getDonateHistory(
