@@ -240,9 +240,20 @@ export class KdtService {
         throw SameNonceTxPoolException;
       });
 
+    const { amount } = await this.kdtHistoryRepository.findAmountByMessageId(
+      dto.message_id,
+    );
+
     await this.messageRepository.answerDonate(
       dto.message_id,
       dto.answer,
+      txRes.events.Transfer.transactionHash,
+    );
+
+    await this.kdtHistoryRepository.answerKdt(
+      dto.message_id,
+      amount,
+      this.request.user.sub,
       txRes.events.Transfer.transactionHash,
     );
   }
