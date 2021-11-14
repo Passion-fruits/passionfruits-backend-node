@@ -4,6 +4,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryColumn,
 } from 'typeorm';
@@ -31,6 +32,6 @@ export class Message {
   @JoinColumn({ name: 'artist_id' })
   artist_id: number;
 
-  @OneToOne(() => KdtHistory, (kdtHistory) => kdtHistory.message_id)
-  kdt_history: KdtHistory;
+  @OneToMany(() => KdtHistory, (kdtHistory) => kdtHistory.message_id)
+  kdt_history: KdtHistory[];
 }

@@ -28,7 +28,9 @@ export class KdtHistory {
   @Column({ length: 150 })
   tx_hash: string;
 
-  @OneToOne(() => Message, (message) => message.kdt_history, { nullable: true })
+  @ManyToOne(() => Message, (message) => message.kdt_history, {
+    nullable: true,
+  })
   @JoinColumn({ name: 'message_id' })
   message_id: number;
 
