@@ -13,4 +13,12 @@ export class KdtRepository extends Repository<Kdt> {
       .where('user_id = :user_id', { user_id })
       .execute();
   }
+
+  public async answerDonate(kdtAmount: number, user_id: number): Promise<void> {
+    await this.createQueryBuilder()
+      .update(Kdt)
+      .set({ donate_kdt: () => `donate_kdt + ${kdtAmount}` })
+      .where('user_id = :user_id', { user_id })
+      .execute();
+  }
 }

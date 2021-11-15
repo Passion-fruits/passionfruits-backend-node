@@ -250,12 +250,14 @@ export class KdtService {
       txRes.events.Transfer.transactionHash,
     );
 
-    await this.kdtHistoryRepository.answerKdt(
+    await this.kdtHistoryRepository.answerDonate(
       dto.message_id,
       amount,
       this.request.user.sub,
       txRes.events.Transfer.transactionHash,
     );
+
+    await this.kdtRepository.answerDonate(amount, this.request.user.sub);
   }
 
   public async getRandomWallet(): Promise<GetRandomWalletResponseData> {

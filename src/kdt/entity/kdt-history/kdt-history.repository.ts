@@ -43,7 +43,7 @@ export class KdtHistoryRepository extends Repository<KdtHistory> {
     await this.save(newKdtHistory);
   }
 
-  public async answerKdt(
+  public async answerDonate(
     message_id: number,
     amount: number,
     user: number,
