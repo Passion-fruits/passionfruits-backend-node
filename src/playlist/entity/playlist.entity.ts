@@ -22,6 +22,9 @@ export class Playlist {
   @Column({ length: 255, nullable: true })
   cover_url: string;
 
+  @Column({ type: 'char', length: 6, nullable: true })
+  color_hex: string;
+
   @CreateDateColumn()
   created_at: Date;
 
