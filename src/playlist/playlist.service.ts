@@ -1,12 +1,15 @@
 import { Inject, Injectable, Scope } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
+import { getAverageColor } from 'fast-average-color-node';
+import { s3 } from 'src/config/multer';
 import {
   NotFoundPlaylistException,
   NotFoundPlaylistHasSongException,
   NotFoundSongException,
   PlaylistHasSongExistException,
   QueryBadRequest,
+  S3GetObjectException,
 } from 'src/shared/exception/exception.index';
 import { IUserReqeust } from 'src/shared/interface/request.interface';
 import { SongViewRepository } from 'src/song/entity/song-view/song-view.repository';
@@ -80,10 +83,21 @@ export class PlaylistService {
         where: { playlist_id },
       })) === 0
     ) {
-      await this.playlistRepository.update(
-        { id: playlist_id },
+      s3.getObject(
         {
-          cover_url: songRecord.cover_url,
+          Bucket: process.env.AWS_S3_BUCKET_NAME,
+          Key: songRecord.cover_url.replace(`${process.env.AWS_S3_URL}/`, ''),
+        },
+        async (err, data) => {
+          if (err) throw S3GetObjectException;
+          const { hex } = await getAverageColor(data.Body as Buffer);
+          await this.playlistRepository.update(
+            { id: playlist_id },
+            {
+              cover_url: songRecord.cover_url,
+              color_hex: hex.replace('#', ''),
+            },
+          );
         },
       );
     }
