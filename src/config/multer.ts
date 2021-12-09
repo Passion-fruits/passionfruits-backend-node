@@ -3,7 +3,7 @@ import * as multerS3 from 'multer-s3';
 import * as AWS from 'aws-sdk';
 import { v4 } from 'uuid';
 import { diskStorage } from 'multer';
-import { existsSync, mkdirSync } from 'fs';
+import { existsSync, mkdir, mkdirSync } from 'fs';
 
 AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -12,6 +12,7 @@ AWS.config.update({
 });
 
 export const s3 = new AWS.S3();
+const uploadPath = `${process.cwd()}/upload/`;
 
 export const ProfileMulterConfigs: MulterOptions = {
   storage: multerS3({
@@ -40,14 +41,7 @@ export const PlaylistMulterConfigs: MulterOptions = {
 export const SongMulterConfigs: MulterOptions = {
   storage: diskStorage({
     destination: (req, file, cb) => {
-      const uploadPath = `${process.cwd()}/upload/`;
-
-      if (!existsSync(uploadPath)) {
-        mkdirSync(uploadPath);
-        mkdirSync(uploadPath + 'song/');
-        mkdirSync(uploadPath + 'short/');
-        mkdirSync(uploadPath + 'cover/');
-      }
+      folderCheck();
       cb(null, uploadPath + 'song/');
     },
 
@@ -56,4 +50,13 @@ export const SongMulterConfigs: MulterOptions = {
     },
   }),
   limits: { fieldSize: 50 * 1024 * 1024 },
+};
+
+const folderCheck = () => {
+  if (!existsSync(uploadPath)) {
+    mkdirSync(uploadPath);
+    mkdirSync(uploadPath + 'song/');
+    mkdirSync(uploadPath + 'short/');
+    mkdirSync(uploadPath + 'cover/');
+  }
 };
