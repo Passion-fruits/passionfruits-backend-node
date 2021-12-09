@@ -88,7 +88,11 @@ export class PlaylistController {
     @Param('playlist_id') playlist_id: number,
     @UploadedFile() file: IMulterFile,
   ): Promise<{ cover_url: string }> {
-    await this.playlistService.modifyCover(playlist_id, file.location);
+    await this.playlistService.modifyCover(
+      playlist_id,
+      file.location,
+      file.key,
+    );
     return { cover_url: file.location };
   }
 
