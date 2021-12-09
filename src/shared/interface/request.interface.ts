@@ -7,4 +7,5 @@ export interface IUserReqeust extends Request {
 
 export interface IMulterFile extends Express.Multer.File {
   location: string;
+  key: string;
 }
