@@ -8,6 +8,7 @@ export class PlaylistVo {
   author: string;
   like: number;
   cover_url: string;
+  color_hex: string;
   playlist_id: number;
   user_id: number;
   created_at: Date;
