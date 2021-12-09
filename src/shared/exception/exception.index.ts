@@ -21,6 +21,9 @@ export const InsufficientBalanceException = new BadRequestException(
 export const SameNonceTxPoolException = new BadRequestException(
   'Same Nonce Tx Pool Exception',
 );
+export const S3GetObjectException = new BadRequestException(
+  'S3 Get Object Exception',
+);
 
 // 401
 export const UnauthorizedTokenException = new UnauthorizedException(
