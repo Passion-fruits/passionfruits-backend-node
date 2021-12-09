@@ -148,13 +148,13 @@ export class SongService {
     const MP3Cutter = require('mp3-cutter');
     const filepath = `${process.cwd()}/upload/`;
     const userRecord = await this.userRepository.findOne(this.request.user.sub);
-    const colorHex = await getAverageColor(`${filepath}song/${cover_url}`);
+    const { hex } = await getAverageColor(`${filepath}song/${cover_url}`);
     const songRecord = await this.songRepository.createSong(
       song_url,
       cover_url,
       dto,
       userRecord,
-      colorHex,
+      hex,
     );
     await this.moodRepository.createMood(songRecord.id, dto.mood);
     await this.songGenreRepository.createSongGenre(songRecord.id, dto.genre);
