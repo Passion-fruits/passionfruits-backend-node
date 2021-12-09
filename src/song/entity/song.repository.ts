@@ -10,6 +10,7 @@ export class SongRepository extends Repository<Song> {
     cover_url: string,
     dto: UploadSongDto,
     user: User,
+    color_hex,
   ): Promise<Song> {
     let newSong: Song;
     newSong = this.create({
@@ -18,6 +19,7 @@ export class SongRepository extends Repository<Song> {
       song_url: `${process.env.AWS_S3_URL}/song/${song_url}`,
       short_url: `${process.env.AWS_S3_URL}/short/${song_url}`,
       cover_url: `${process.env.AWS_S3_URL}/cover/${cover_url}`,
+      color_hex,
       user,
     });
     return await this.save(newSong);
