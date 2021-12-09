@@ -140,13 +140,27 @@ export class PlaylistService {
   public async modifyCover(
     playlist_id: number,
     cover_url: string,
+    key: string,
   ): Promise<void> {
     const playlistRecord = await this.playlistRepository.findMyPlaylist(
       playlist_id,
       this.request.user.sub,
     );
     if (!playlistRecord) throw NotFoundPlaylistException;
-    await this.playlistRepository.update(playlist_id, { cover_url });
+    s3.getObject(
+      {
+        Bucket: process.env.AWS_S3_BUCKET_NAME,
+        Key: key,
+      },
+      async (err, data) => {
+        if (err) throw S3GetObjectException;
+        const { hex } = await getAverageColor(data.Body as Buffer);
+        await this.playlistRepository.update(playlist_id, {
+          cover_url,
+          color_hex: hex.replace('#', ''),
+        });
+      },
+    );
   }
 
   public async getRandomPlaylist(
