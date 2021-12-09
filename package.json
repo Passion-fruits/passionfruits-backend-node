@@ -40,6 +40,7 @@
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "dotenv": "^8.6.0",
+    "fast-average-color-node": "^2.1.0",
     "fs": "*",
     "moment": "^2.29.1",
     "mp3-cutter": "^1.0.6",
@@ -52,6 +53,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.3",
+    "save": "^2.4.0",
     "typeorm": "^0.2.34",
     "uuid": "^8.3.2",
     "winston": "^3.3.3"

@@ -27,6 +27,7 @@ import { GetSongsByUserIdResponseData } from './dto/get-songs-by-user-id.dto';
 import { GetStreamResponseData } from './dto/get-stream.dto';
 import { GetRecentSongResponseData } from './dto/get-recent-song.dto';
 import { GetPopularSongResponseData } from './dto/get-popular-songs.dto';
+import { getAverageColor } from 'fast-average-color-node';
 
 @Injectable({ scope: Scope.REQUEST })
 export class SongService {
@@ -147,11 +148,13 @@ export class SongService {
     const MP3Cutter = require('mp3-cutter');
     const filepath = `${process.cwd()}/upload/`;
     const userRecord = await this.userRepository.findOne(this.request.user.sub);
+    const colorHex = await getAverageColor(`${filepath}song/${cover_url}`);
     const songRecord = await this.songRepository.createSong(
       song_url,
       cover_url,
       dto,
       userRecord,
+      colorHex,
     );
     await this.moodRepository.createMood(songRecord.id, dto.mood);
     await this.songGenreRepository.createSongGenre(songRecord.id, dto.genre);
