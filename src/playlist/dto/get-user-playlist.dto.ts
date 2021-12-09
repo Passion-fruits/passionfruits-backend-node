@@ -3,5 +3,6 @@ export class GetUserPlaylistResponseData {
   author: string;
   like: number;
   cover_url: string;
+  color_hex: string;
   playlist_id: number;
 }
