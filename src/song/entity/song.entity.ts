@@ -36,6 +36,9 @@ export class Song {
   @Column({ length: 255 })
   cover_url: string;
 
+  @Column({ type: 'char', length: 6 })
+  color_hex: string;
+
   @CreateDateColumn()
   created_at: Date;
 
