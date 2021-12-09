@@ -154,7 +154,7 @@ export class SongService {
       cover_url,
       dto,
       userRecord,
-      hex,
+      hex.replace('#', ''),
     );
     await this.moodRepository.createMood(songRecord.id, dto.mood);
     await this.songGenreRepository.createSongGenre(songRecord.id, dto.genre);
