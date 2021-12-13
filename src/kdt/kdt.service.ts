@@ -69,7 +69,7 @@ export class KdtService {
     const { wallet } = await this.profileRepository.findAccountById(
       this.request.user.sub,
     );
-    const kdtAmount = (dto.amount * 10) / 12 / 100;
+    const kdtAmount = (dto.amount * 10) / 12 / 100; // 수수료
 
     const txRes = await KIP7.transfer(wallet, Math.pow(10, 18) * kdtAmount, {
       from: process.env.FEE_PAYER_ADDRESS,

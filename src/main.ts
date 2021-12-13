@@ -2,6 +2,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { AppModule } from './app.module';
+import { connectRedis } from './config/redis';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
@@ -13,6 +14,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
+  await connectRedis();
   await app.listen(process.env.PORT);
   console.log(`Server running on: ${await app.getUrl()}`);
 }

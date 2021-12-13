@@ -2,8 +2,12 @@ import {
   Body,
   Controller,
   Get,
+  Headers,
+  HttpCode,
+  HttpStatus,
   Logger,
   Param,
+  Patch,
   Post,
   Query,
   UploadedFiles,
@@ -90,5 +94,14 @@ export class SongController {
     @Param('song_id') id: number,
   ): Promise<GetSongResponseData> {
     return await this.songService.getSong(id);
+  }
+
+  @Patch('view/:song_id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  public viewSong(
+    @Param('song_id') id: number,
+    @Headers('x-forwarded-for') ip: string,
+  ): void {
+    this.songService.viewSong(id, ip);
   }
 }
