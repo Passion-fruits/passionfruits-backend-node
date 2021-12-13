@@ -39,6 +39,9 @@ export class Song {
   @Column({ type: 'char', length: 6 })
   color_hex: string;
 
+  @Column({ type: 'bigint' })
+  view: number;
+
   @CreateDateColumn()
   created_at: Date;
 
