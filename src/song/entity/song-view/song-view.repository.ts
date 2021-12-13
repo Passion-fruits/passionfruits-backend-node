@@ -39,6 +39,7 @@ export class SongViewRepository extends Repository<SongView> {
       .addSelect('view.song_url', 'song_url')
       .addSelect('view.title', 'title')
       .addSelect('view.description', 'description')
+      .addSelect('view.color_hex', 'color_hex')
       .addSelect('view.created_at', 'created_at')
       .addSelect('view.genre', 'genre')
       .addSelect('view.mood', 'mood')
