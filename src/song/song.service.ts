@@ -28,6 +28,7 @@ import { GetStreamResponseData } from './dto/get-stream.dto';
 import { GetRecentSongResponseData } from './dto/get-recent-song.dto';
 import { GetPopularSongResponseData } from './dto/get-popular-songs.dto';
 import { getAverageColor } from 'fast-average-color-node';
+import { redisClient } from 'src/config/redis';
 
 @Injectable({ scope: Scope.REQUEST })
 export class SongService {
@@ -169,6 +170,13 @@ export class SongService {
     await this.uploadS3(song_url, 'short', 'short');
     await this.uploadS3(song_url, 'song', 'song');
     await this.uploadS3(cover_url, 'song', 'cover');
+  }
+
+  public async viewSong(id: number, ip: string): Promise<void> {
+    const key = `${ip}.song_${id}`;
+    if ((await redisClient.get(key)) === 'x') return;
+    redisClient.set(key, 'x', { EX: 15 });
+    redisClient.incr(`song_${id}`);
   }
 
   private async uploadS3(
