@@ -5,6 +5,7 @@ export class GetSongResponseData {
   song_url: string;
   title: string;
   description: string;
+  color_hex: string;
   genre: number;
   mood: number;
   created_at: Date;

@@ -22,6 +22,7 @@ import { Song } from '../song.entity';
       .addSelect('song.short_url', 'short_url')
       .addSelect('song.title', 'title')
       .addSelect('song.description', 'description')
+      .addSelect('song.color_hex', 'color_hex')
       .addSelect('song.created_at', 'created_at')
       .addSelect('song_genre.genre_type', 'genre_number')
       .addSelect('genre_type.name', 'genre')
@@ -61,6 +62,9 @@ export class SongView {
 
   @ViewColumn()
   description: string;
+
+  @ViewColumn()
+  color_hex: string;
 
   @ViewColumn()
   created_at: Date;
